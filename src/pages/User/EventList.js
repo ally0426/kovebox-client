@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { fetchScrapedEvents } from "../../services/eventService";
-import EventCard from "../../components/EventCard";
-import Calendar from "react-calendar";
-// import "react-calendar/dist/Calendar.css";
+// import EventCard from "../../components/EventCard";
+// import Calendar from "react-calendar";
 import "./EventList.css";
 
 const EventList = () => {
