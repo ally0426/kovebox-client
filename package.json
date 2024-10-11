@@ -43,5 +43,8 @@
   "main": "index.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "ajv": "^7.2.4"
+  }
 }

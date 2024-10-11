@@ -9,7 +9,7 @@ const EventList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
-  const limit = 10; // Number of activities to show at a time
+  const limit = 20; // Number of activities to show at a time
   // Fetch all activities from the backend when the component mounts
   useEffect(() => {
     const fetchActivities = async () => {
