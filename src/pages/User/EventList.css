@@ -52,54 +52,8 @@
     font-size: 16px;
   }
   
-  .pagination-controls {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .pagination-controls button {
-    padding: 10px 20px;
-    margin: 0 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .pagination-controls span {
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-  
-  .pagination-controls button:disabled {
-    background-color: #cccccc;
-  }
-  
-  /* eventList.css */
-.pagination-controls {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .pagination-controls button {
-    padding: 10px 20px;
-    margin: 0 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .pagination-controls span {
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-  
-  .pagination-controls button:disabled {
-    background-color: #cccccc;
-  }
+ 
+ 
   
   select {
     margin: 20px 0;

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { fetchScrapedEvents } from "../../services/eventService";
 import EventCard from "../../components/EventCard";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+// import "react-calendar/dist/Calendar.css";
 import "./EventList.css";
-import "./pagination.css";
 
 const EventList = () => {
   const [activities, setActivities] = useState([]);
