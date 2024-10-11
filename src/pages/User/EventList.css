@@ -1,0 +1,111 @@
+.event-list {
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.event-list h2 {
+  font-size: 1.5rem;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.event-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.event-list li {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.event-list a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.event-list a:hover {
+  text-decoration: underline;
+}
+
+  
+  @media (min-width: 768px) {
+    .event-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .event-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  select {
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-controls button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .pagination-controls span {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  .pagination-controls button:disabled {
+    background-color: #cccccc;
+  }
+  
+  /* eventList.css */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-controls button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .pagination-controls span {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  .pagination-controls button:disabled {
+    background-color: #cccccc;
+  }
+  
+  select {
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  

@@ -1,0 +1,48 @@
+.book-event {
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
+  
+  .book-event h2 {
+    font-size: 1.5rem;
+    color: #222;
+    margin-bottom: 15px;
+  }
+  
+  .book-event form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .book-event label {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .book-event input {
+    margin-bottom: 15px;
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  .book-event button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .book-event button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  .book-event button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  
