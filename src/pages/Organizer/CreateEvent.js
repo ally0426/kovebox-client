@@ -26,12 +26,14 @@ const CreateEvent = () => {
     <form onSubmit={handleSubmit}>
       <h2>Create New Event</h2>
       <input
+        id="eventTitle"
         type="text"
         name="title"
         placeholder="Event Title"
         onChange={handleChange}
       />
       <input
+        id="eventCategory"
         type="text"
         name="category"
         placeholder="Category"
@@ -40,12 +42,14 @@ const CreateEvent = () => {
       <input type="date" name="date" onChange={handleChange} />
       <input type="time" name="time" onChange={handleChange} />
       <input
+        id="eventLocation"
         type="text"
         name="location"
         placeholder="Location"
         onChange={handleChange}
       />
       <input
+        id="eventPrice"
         type="number"
         name="price"
         placeholder="Price"

@@ -25,6 +25,7 @@ const BookEvent = () => {
       <h2>Book Event</h2>
       <form onSubmit={handleSubmit}>
         <input
+          id="bookName"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -32,6 +33,7 @@ const BookEvent = () => {
           required
         />
         <input
+          id="bookEmail"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -39,6 +41,7 @@ const BookEvent = () => {
           required
         />
         <input
+          id="bookPhone"
           type="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
