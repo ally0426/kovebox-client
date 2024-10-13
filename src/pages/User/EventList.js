@@ -10,14 +10,15 @@ const EventList = () => {
   const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
   const limit = 20; // Number of activities to show at a time
+
+  const API_BASE_URL =
+    process.env.REACT_APP_API_URL || "https://kovebox-server.vercel.app/api";
+
   // Fetch all activities from the backend when the component mounts
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await fetch(
-          // "http://localhost:5000/api/scrape/eventbrite" ||
-          "https://kovebox-server.vercel.app/api/scrape/eventbrite"
-        );
+        const response = await fetch(`${API_BASE_URL}/scrape/eventbrite`);
         const data = await response.json();
 
         if (data.success) {
@@ -34,7 +35,7 @@ const EventList = () => {
     };
 
     fetchActivities();
-  }, []);
+  }, [API_BASE_URL]);
 
   // Function to load more activities when scrolling
   const loadMoreActivities = () => {
@@ -69,7 +70,7 @@ const EventList = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, activities, visibleActivities]);
+  }, [loading, activities, visibleActivities, loadMoreActivities]);
 
   // Display loading, error, or the list of activities
   if (loading) {

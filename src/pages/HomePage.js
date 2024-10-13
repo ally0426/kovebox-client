@@ -40,7 +40,7 @@ const HomePage = () => {
     };
 
     fetchActivities();
-  }, []);
+  }, [API_BASE_URL]);
 
   const loadMoreActivities = () => {
     const nextOffset = offset + limit;
@@ -71,7 +71,7 @@ const HomePage = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, activities, visibleActivities]);
+  }, [loading, activities, visibleActivities, loadMoreActivities]);
 
   if (loading) {
     return <div>Loading activities...</div>;
