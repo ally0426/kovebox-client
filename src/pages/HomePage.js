@@ -8,13 +8,12 @@ const HomePage = () => {
   const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
   const limit = 10;
-  const API_BASE_URL =
-    process.env.REACT_APP_API_URL || "https://kovebox-server.vercel.app/api";
+  // const API_BASE_URL = process.env.REACT_APP_API_URL || "https://kovebox-server.vercel.app/api";
 
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/scrape/eventbrite`, {
+        const response = await fetch("https://kovebox-server.vercel.app/api", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -40,7 +39,7 @@ const HomePage = () => {
     };
 
     fetchActivities();
-  }, [API_BASE_URL]);
+  }, []);
 
   const loadMoreActivities = () => {
     const nextOffset = offset + limit;
