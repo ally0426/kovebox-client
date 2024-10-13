@@ -12,6 +12,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchActivities = async () => {
+      console.log("loading fetchActivities in HomePage.js...");
       try {
         const response = await fetch(
           "https://kovebox-server-eta.vercel.app/api",
