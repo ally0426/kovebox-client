@@ -15,7 +15,8 @@ const HomePage = () => {
       console.log("loading fetchActivities in HomePage.js...");
       try {
         const response = await fetch(
-          "https://kovebox-server-eta.vercel.app/api",
+          "/api/scrape/eventbrite",
+          // "https://kovebox-server-eta.vercel.app/api",
           {
             method: "GET",
             headers: {

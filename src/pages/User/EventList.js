@@ -18,7 +18,8 @@ const EventList = () => {
     const fetchActivities = async () => {
       try {
         const response = await fetch(
-          "https://kovebox-server-eta.vercel.app/api"
+          "/api/scrape/eventbrite"
+          // "https://kovebox-server-eta.vercel.app/api"
         );
         const data = await response.json();
 
