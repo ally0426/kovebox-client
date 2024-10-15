@@ -11,15 +11,14 @@ const EventList = () => {
   const [offset, setOffset] = useState(0);
   const limit = 20; // Number of activities to show at a time
 
-  const API_BASE_URL =
-    process.env.REACT_APP_API_URL || "https://kovebox-server.onrender.com/api";
+  // const API_BASE_URL = process.env.REACT_APP_API_URL || "https://kovebox-server.onrender.com/api";
 
   // Fetch all activities from the backend when the component mounts
   useEffect(() => {
     const fetchActivities = async () => {
       try {
         const response = await fetch(
-          "${API_BASE_URL}/scrape/eventbrite",
+          "https://kovebox-server.onrender.com/api/scrape/eventbrite",
           // "http://localhost:5000/api/scrape/eventbrite",
           // "https://kovebox-server.onrender.com/api"
           {
@@ -50,7 +49,7 @@ const EventList = () => {
     };
 
     fetchActivities();
-  }, [API_BASE_URL]);
+  }, []);
 
   // Function to load more activities when scrolling
   const loadMoreActivities = () => {

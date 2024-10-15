@@ -8,15 +8,14 @@ const HomePage = () => {
   const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
   const limit = 10;
-  const API_BASE_URL =
-    process.env.REACT_APP_API_URL || "https://kovebox-server.onrender.com/api";
+  // const API_BASE_URL = process.env.REACT_APP_API_URL || "https://kovebox-server.onrender.com/api";
 
   useEffect(() => {
     const fetchActivities = async () => {
       console.log("loading fetchActivities in HomePage.js...");
       try {
         const response = await fetch(
-          "${API_BASE_URL}/scrape/eventbrite",
+          "https://kovebox-server.onrender.com/api/scrape/eventbrite",
           // "http://localhost:5000/api/scrape/eventbrite",
           // "{`${API_BASE_URL}/scrape/eventbrite`}",
           // "https://kovebox-server.onrender.com/api",
@@ -31,7 +30,7 @@ const HomePage = () => {
         if (!response.ok) {
           throw new Error(response.statusText);
         }
-        console.log(`API_BASE_URL: ${API_BASE_URL}`);
+        // console.log(`API_BASE_URL: ${API_BASE_URL}`);
         const data = await response.json();
 
         if (data.success) {
@@ -48,7 +47,7 @@ const HomePage = () => {
     };
 
     fetchActivities();
-  }, [API_BASE_URL]);
+  }, []);
 
   const loadMoreActivities = () => {
     const nextOffset = offset + limit;
