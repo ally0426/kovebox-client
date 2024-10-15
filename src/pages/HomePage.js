@@ -9,8 +9,7 @@ const HomePage = () => {
   const [offset, setOffset] = useState(0);
   const limit = 10;
   const API_BASE_URL =
-    process.env.REACT_APP_API_URL ||
-    "https://kovebox-server-eta.vercel.app/api";
+    process.env.REACT_APP_API_URL || "https://kovebox-server.onrender.com/api";
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -20,7 +19,7 @@ const HomePage = () => {
           "${API_BASE_URL}/scrape/eventbrite",
           // "http://localhost:5000/api/scrape/eventbrite",
           // "{`${API_BASE_URL}/scrape/eventbrite`}",
-          // "https://kovebox-server-eta.vercel.app/api",
+          // "https://kovebox-server.onrender.com/api",
           {
             method: "GET",
             headers: {

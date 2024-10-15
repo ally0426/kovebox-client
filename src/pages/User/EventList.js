@@ -12,8 +12,7 @@ const EventList = () => {
   const limit = 20; // Number of activities to show at a time
 
   const API_BASE_URL =
-    process.env.REACT_APP_API_URL ||
-    "https://kovebox-server-eta.vercel.app/api";
+    process.env.REACT_APP_API_URL || "https://kovebox-server.onrender.com/api";
 
   // Fetch all activities from the backend when the component mounts
   useEffect(() => {
@@ -22,7 +21,7 @@ const EventList = () => {
         const response = await fetch(
           "${API_BASE_URL}/scrape/eventbrite",
           // "http://localhost:5000/api/scrape/eventbrite",
-          // "https://kovebox-server-eta.vercel.app/api"
+          // "https://kovebox-server.onrender.com/api"
           {
             method: "GET",
             headers: {
