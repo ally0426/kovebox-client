@@ -13,7 +13,6 @@ const cities = [
 ];
 
 const HomePage = () => {
-<<<<<<< HEAD
   const [events, setEvents] = useState([]);
   const [location, setLocation] = useState({
     city: "Los Angeles, CA",
@@ -35,49 +34,6 @@ const HomePage = () => {
       },
       () => {
         setError("Location access denied. Showing events for Los Angeles, CA.");
-=======
-  const [activities, setActivities] = useState([]);
-  const [visibleActivities, setVisibleActivities] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [offset, setOffset] = useState(0);
-  const limit = 10;
-  // const API_BASE_URL = process.env.REACT_APP_API_URL || "https://kovebox-server.onrender.com/api";
-
-  useEffect(() => {
-    const fetchActivities = async () => {
-      console.log("loading fetchActivities in HomePage.js...");
-      try {
-        const response = await fetch(
-          "https://kovebox-server.onrender.com/api/scrape/eventbrite",
-          // "http://localhost:5000/api/scrape/eventbrite",
-          // "{`${API_BASE_URL}/scrape/eventbrite`}",
-          // "https://kovebox-server.onrender.com/api",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        // console.log(`API_BASE_URL: ${API_BASE_URL}`);
-        const data = await response.json();
-
-        if (data.success) {
-          setActivities(data.data);
-          setVisibleActivities(data.data.slice(0, limit));
-        } else {
-          setError("Failed to fetch activities");
-        }
-      } catch (err) {
-        setError("An error occurred while fetching activities");
-      } finally {
-        setLoading(false);
->>>>>>> b1ccd3fd0610dca0d23b186d2a96f3e673bf679c
       }
     );
   };
