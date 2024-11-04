@@ -18,9 +18,22 @@ const EventList = () => {
     const fetchActivities = async () => {
       try {
         const response = await fetch(
-          "/api"
+          // { API_BASE_URL },
+          "http://localhost:5000/api/scrape/activities",
+          // "http://localhost:5000/api/scrape/eventbrite",
           // "https://kovebox-server-eta.vercel.app/api"
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
         );
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+
         const data = await response.json();
 
         if (data.success) {
