@@ -11,17 +11,23 @@ const EventList = () => {
   const [offset, setOffset] = useState(0);
   const limit = 20; // Number of activities to show at a time
 
-  // const API_BASE_URL = process.env.REACT_APP_API_URL || "https://kovebox-server-eta.vercel.app/api";
+  // const API_BASE_URL = process.env.REACT_APP_API_URL || "https://kovebox-server.onrender.com/api";
 
   // Fetch all activities from the backend when the component mounts
   useEffect(() => {
     const fetchActivities = async () => {
       try {
         const response = await fetch(
+<<<<<<< HEAD
           // { API_BASE_URL },
           "http://localhost:5000/api/scrape/activities",
           // "http://localhost:5000/api/scrape/eventbrite",
           // "https://kovebox-server-eta.vercel.app/api"
+=======
+          "https://kovebox-server.onrender.com/api/scrape/eventbrite",
+          // "http://localhost:5000/api/scrape/eventbrite",
+          // "https://kovebox-server.onrender.com/api"
+>>>>>>> b1ccd3fd0610dca0d23b186d2a96f3e673bf679c
           {
             method: "GET",
             headers: {
