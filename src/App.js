@@ -1,7 +1,9 @@
-import React from "react";
+// 1.
+
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import AuthCallback from "./pages/AuthCallback";
+import EventList from "./pages/User/EventList";
+
 import "./App.css";
 
 function App() {
@@ -9,7 +11,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/auth/google/callback" element={<AuthCallback />} />
+        <Route path="/events" element={<EventList />} />
       </Routes>
     </Router>
   );
@@ -17,6 +19,27 @@ function App() {
 
 export default App;
 
+// 2.
+// import React from "react";
+// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// import HomePage from "./pages/HomePage";
+// import AuthCallback from "./pages/AuthCallback";
+// import "./App.css";
+
+// function App() {
+//   return (
+//     <Router>
+//       <Routes>
+//         <Route path="/" element={<HomePage />} />
+//         <Route path="/auth/google/callback" element={<AuthCallback />} />
+//       </Routes>
+//     </Router>
+//   );
+// }
+
+// export default App;
+
+// 3.
 // // src/App.js
 // import React from "react";
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";

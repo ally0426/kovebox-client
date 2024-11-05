@@ -1,3 +1,4 @@
+// 1.
 import React, { useEffect, useState } from "react";
 
 const cities = [
@@ -19,7 +20,6 @@ const HomePage = () => {
     lat: 34.0522,
     lng: -118.2437,
   });
-  const [error, setError] = useState("");
   const [message, setMessage] = useState("Showing events in Los Angeles, CA");
 
   const handleLocationPermission = () => {
@@ -33,7 +33,9 @@ const HomePage = () => {
         setMessage("Showing events based on your current location");
       },
       () => {
-        setError("Location access denied. Showing events for Los Angeles, CA.");
+        setMessage(
+          "Location access denied. Showing events for Los Angeles, CA."
+        );
       }
     );
   };
@@ -47,26 +49,17 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // Request user's location on initial load
     handleLocationPermission();
 
     const fetchEvents = async () => {
-      const googleAccessToken = localStorage.getItem("google_access_token");
-      if (!googleAccessToken) {
-        setError("Please log in with Google to view events.");
-        return;
-      }
-
       try {
-        // Fetch events with location-based filtering (lat & lng as query params)
         const response = await fetch(
-          `/api/events?access_token=${googleAccessToken}&lat=${location.lat}&lng=${location.lng}`
+          `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=${location.lat}&lng=${location.lng}`
         );
         const data = await response.json();
         setEvents(data);
       } catch (error) {
         console.error("Error fetching events:", error);
-        setError("Error fetching events. Please try again.");
       }
     };
 
@@ -91,11 +84,6 @@ const HomePage = () => {
           ))}
         </select>
       </div>
-      {error && (
-        <div>
-          <p>{error}</p>
-        </div>
-      )}
       <ul>
         {events.map((event, index) => (
           <li key={index}>
@@ -115,6 +103,125 @@ const HomePage = () => {
 
 export default HomePage;
 
+// 2.
+// import React, { useEffect, useState } from "react";
+
+// const cities = [
+//   { name: "New York, NY", lat: 40.7128, lng: -74.006 },
+//   { name: "Los Angeles, CA", lat: 34.0522, lng: -118.2437 },
+//   { name: "Chicago, IL", lat: 41.8781, lng: -87.6298 },
+//   { name: "Houston, TX", lat: 29.7604, lng: -95.3698 },
+//   { name: "Phoenix, AZ", lat: 33.4484, lng: -112.074 },
+//   { name: "San Francisco, CA", lat: 37.7749, lng: -122.4194 },
+//   { name: "Seattle, WA", lat: 47.6062, lng: -122.3321 },
+//   { name: "Boston, MA", lat: 42.3601, lng: -71.0589 },
+//   { name: "Miami, FL", lat: 25.7617, lng: -80.1918 },
+// ];
+
+// const HomePage = () => {
+//   const [events, setEvents] = useState([]);
+//   const [location, setLocation] = useState({
+//     city: "Los Angeles, CA",
+//     lat: 34.0522,
+//     lng: -118.2437,
+//   });
+//   const [error, setError] = useState("");
+//   const [message, setMessage] = useState("Showing events in Los Angeles, CA");
+
+//   const handleLocationPermission = () => {
+//     navigator.geolocation.getCurrentPosition(
+//       (position) => {
+//         setLocation({
+//           city: "Your Current Location",
+//           lat: position.coords.latitude,
+//           lng: position.coords.longitude,
+//         });
+//         setMessage("Showing events based on your current location");
+//       },
+//       () => {
+//         setError("Location access denied. Showing events for Los Angeles, CA.");
+//       }
+//     );
+//   };
+
+//   const handleCityChange = (event) => {
+//     const selectedCity = cities.find(
+//       (city) => city.name === event.target.value
+//     );
+//     setLocation(selectedCity);
+//     setMessage(`Showing events in ${selectedCity.name}`);
+//   };
+
+//   useEffect(() => {
+//     // Request user's location on initial load
+//     handleLocationPermission();
+
+//     const fetchEvents = async () => {
+//       const googleAccessToken = localStorage.getItem("google_access_token");
+//       if (!googleAccessToken) {
+//         setError("Please log in with Google to view events.");
+//         return;
+//       }
+
+//       try {
+//         // Fetch events with location-based filtering (lat & lng as query params)
+//         const response = await fetch(
+//           `/api/events?access_token=${googleAccessToken}&lat=${location.lat}&lng=${location.lng}`
+//         );
+//         const data = await response.json();
+//         setEvents(data);
+//       } catch (error) {
+//         console.error("Error fetching events:", error);
+//         setError("Error fetching events. Please try again.");
+//       }
+//     };
+
+//     fetchEvents();
+//   }, [location]);
+
+//   return (
+//     <div>
+//       <h1>Upcoming Events</h1>
+//       <p>{message}</p>
+//       <div>
+//         <label htmlFor="city-select">Select a city:</label>
+//         <select
+//           id="city-select"
+//           onChange={handleCityChange}
+//           value={location.city}
+//         >
+//           {cities.map((city) => (
+//             <option key={city.name} value={city.name}>
+//               {city.name}
+//             </option>
+//           ))}
+//         </select>
+//       </div>
+//       {error && (
+//         <div>
+//           <p>{error}</p>
+//         </div>
+//       )}
+//       <ul>
+//         {events.map((event, index) => (
+//           <li key={index}>
+//             <h2>{event.title}</h2>
+//             <p>Date: {event.date}</p>
+//             <p>Location: {event.location}</p>
+//             <a href={event.link} target="_blank" rel="noopener noreferrer">
+//               View Event
+//             </a>
+//             <p>Source: {event.source}</p>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
+
+// export default HomePage;
+
+// 3.
 // import React, { useEffect, useState } from "react";
 // import "./HomePage.css"; // Import the CSS file for styling
 
