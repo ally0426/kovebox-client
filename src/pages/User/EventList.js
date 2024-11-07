@@ -1,85 +1,62 @@
-import React, { useEffect, useState } from "react";
-
-const cities = [
-  { name: "New York, NY", lat: 40.7128, lng: -74.006 },
-  { name: "Los Angeles, CA", lat: 34.0522, lng: -118.2437 },
-  { name: "Chicago, IL", lat: 41.8781, lng: -87.6298 },
-  { name: "Houston, TX", lat: 29.7604, lng: -95.3698 },
-  { name: "Phoenix, AZ", lat: 33.4484, lng: -112.074 },
-  { name: "San Francisco, CA", lat: 37.7749, lng: -122.4194 },
-  { name: "Seattle, WA", lat: 47.6062, lng: -122.3321 },
-  { name: "Boston, MA", lat: 42.3601, lng: -71.0589 },
-  { name: "Miami, FL", lat: 25.7617, lng: -80.1918 },
-];
+import React, { useEffect, useState, useCallback } from "react";
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
-  const [location, setLocation] = useState({
-    city: "Los Angeles, CA",
-    lat: 34.0522,
-    lng: -118.2437,
-  });
-  const [message, setMessage] = useState("Showing events in Los Angeles, CA");
+  const [offset, setOffset] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  const handleLocationPermission = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLocation({
-          city: "Your Current Location",
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-        setMessage("Showing events based on your current location");
-      },
-      () => {
-        setMessage(
-          "Location access denied. Showing events for Los Angeles, CA."
-        );
+  // Function to fetch events with pagination
+  const fetchEvents = useCallback(async () => {
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=34.0522&lng=-118.2437&limit=20&offset=${offset}`
+      );
+      const data = await response.json();
+
+      if (data.length === 0) {
+        setHasMore(false);
+      } else {
+        setEvents((prevEvents) => [...prevEvents, ...data]);
+        setOffset((prevOffset) => prevOffset + 20);
       }
-    );
-  };
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [offset, loading, hasMore]);
 
-  const handleCityChange = (event) => {
-    const selectedCity = cities.find(
-      (city) => city.name === event.target.value
-    );
-    setLocation(selectedCity);
-    setMessage(`Showing events in ${selectedCity.name}`);
+  // Initial fetch and infinite scroll
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
+
+  // Infinite scroll handler
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      document.documentElement.scrollHeight
+    ) {
+      fetchEvents();
+    }
   };
 
   useEffect(() => {
-    handleLocationPermission();
-
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=${location.lat}&lng=${location.lng}`
-        );
-        const data = await response.json();
-        setEvents(data);
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
-
-    fetchEvents();
-  }, [location]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   return (
     <div>
-      <h1>Upcoming Events</h1>
-      <p>{message}</p>
-      <select onChange={handleCityChange} value={location.city}>
-        {cities.map((city) => (
-          <option key={city.name} value={city.name}>
-            {city.name}
-          </option>
-        ))}
-      </select>
+      <h2>Upcoming Events</h2>
       <ul>
         {events.map((event, index) => (
           <li key={index}>
-            <h2>{event.title}</h2>
+            <h3>{event.title}</h3>
             <p>{event.snippet}</p>
             <a href={event.link} target="_blank" rel="noopener noreferrer">
               View Event
@@ -87,11 +64,116 @@ const EventList = () => {
           </li>
         ))}
       </ul>
+      {loading && <p>Loading more events...</p>}
+      {!hasMore && <p>No more events to load.</p>}
     </div>
   );
 };
 
 export default EventList;
+
+// import React, { useEffect, useState } from "react";
+
+// const cities = [
+//   { name: "New York, NY", lat: 40.7128, lng: -74.006 },
+//   { name: "Los Angeles, CA", lat: 34.0522, lng: -118.2437 },
+//   { name: "Chicago, IL", lat: 41.8781, lng: -87.6298 },
+//   { name: "Houston, TX", lat: 29.7604, lng: -95.3698 },
+//   { name: "Phoenix, AZ", lat: 33.4484, lng: -112.074 },
+//   { name: "San Francisco, CA", lat: 37.7749, lng: -122.4194 },
+//   { name: "Seattle, WA", lat: 47.6062, lng: -122.3321 },
+//   { name: "Boston, MA", lat: 42.3601, lng: -71.0589 },
+//   { name: "Miami, FL", lat: 25.7617, lng: -80.1918 },
+// ];
+
+// const EventList = () => {
+//   const [events, setEvents] = useState([]);
+//   const [location, setLocation] = useState({
+//     city: "Los Angeles, CA",
+//     lat: 34.0522,
+//     lng: -118.2437,
+//   });
+//   const [message, setMessage] = useState("Showing events in Los Angeles, CA");
+
+//   console.log("Location: ", location);
+
+//   const handleLocationPermission = () => {
+//     navigator.geolocation.getCurrentPosition(
+//       (position) => {
+//         setLocation({
+//           city: "Your Current Location",
+//           lat: position.coords.latitude,
+//           lng: position.coords.longitude,
+//         });
+//         setMessage("Showing events based on your current location");
+//       },
+//       () => {
+//         setMessage(
+//           "Location access denied. Showing events for Los Angeles, CA."
+//         );
+//       }
+//     );
+//   };
+
+//   const handleCityChange = (event) => {
+//     const selectedCity = cities.find(
+//       (city) => city.name === event.target.value
+//     );
+//     setLocation(selectedCity);
+//     setMessage(`Showing events in ${selectedCity.name}`);
+//   };
+
+//   useEffect(() => {
+//     handleLocationPermission();
+
+//     const fetchEvents = async () => {
+//       try {
+//         const response = await fetch(
+//           `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=${location.lat}&lng=${location.lng}`
+//         );
+//         if (!response.ok) {
+//           throw new Error("Error: ${response.status} - ${response.statusText}");
+//         }
+//         const data = await response.json();
+//         setEvents(data);
+//       } catch (error) {
+//         console.error("Error fetching events:", error);
+//         console.log(
+//           "Unable to fetch events at the moment. Please try again later..."
+//         );
+//       }
+//     };
+
+//     fetchEvents();
+//   }, [location]);
+
+//   return (
+//     <div>
+//       <h1>Upcoming Events</h1>
+//       <p>{message}</p>
+//       <select onChange={handleCityChange} value={location.city}>
+//         {cities.map((city) => (
+//           <option key={city.name} value={city.name}>
+//             {city.name}
+//           </option>
+//         ))}
+//       </select>
+//       <ul>
+//         {events.map((event, index) => (
+//           <li key={index}>
+//             <h2>{event.title}</h2>
+//             <p>{event.snippet}</p>
+//             <a href={event.link} target="_blank" rel="noopener noreferrer">
+//               View Event
+//             </a>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
+
+// export default EventList;
 
 // // 1.
 // import React, { useEffect, useState } from "react";
