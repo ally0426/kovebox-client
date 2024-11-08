@@ -30,7 +30,7 @@ const EventList = () => {
       setLoading(false);
     }
   }, [offset, loading, hasMore]);
-  console.log(`offset: ${offset}, loading: ${loading}, hasMore: ${hasMore}`);`)
+  console.log(`offset: ${offset}, loading: ${loading}, hasMore: ${hasMore}`);
 
   // Initial fetch and infinite scroll
   useEffect(() => {
