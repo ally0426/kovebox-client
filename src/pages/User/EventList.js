@@ -16,7 +16,7 @@ const EventList = () => {
         `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=34.0522&lng=-118.2437&limit=20&offset=${offset}`
       );
       const data = await response.json();
-      console.log(`data: {data}`);
+      console.log(`data: ${data}`);
 
       if (data.length === 0) {
         setHasMore(false);
@@ -30,6 +30,7 @@ const EventList = () => {
       setLoading(false);
     }
   }, [offset, loading, hasMore]);
+  console.log(`offset: ${offset}, loading: ${loading}, hasMore: ${hasMore}`);`)
 
   // Initial fetch and infinite scroll
   useEffect(() => {
