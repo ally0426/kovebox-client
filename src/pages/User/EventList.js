@@ -29,6 +29,7 @@ const EventList = () => {
       setLoading(false);
     }
   }, [offset, loading, hasMore]);
+  console.log(`offset: ${offset}, loading: ${loading}, hasMore: ${hasMore}`);
 
   // Initial fetch and infinite scroll
   useEffect(() => {
@@ -47,6 +48,7 @@ const EventList = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
+    console.log("scrolling..");
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
