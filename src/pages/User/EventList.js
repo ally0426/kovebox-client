@@ -1,85 +1,113 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 
-const EventList = () => {
-  const [events, setEvents] = useState([]);
-  const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-
-  // Function to fetch events with pagination
-  const fetchEvents = useCallback(async () => {
-    if (loading || !hasMore) return;
-
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=34.0522&lng=-118.2437&limit=20&offset=${offset}` // Los Angeles, CA
-        // `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=44.9778&lng=-93.2650&limit=20&offset=${offset}` // Minneapolis, MN
-      );
-      const data = await response.json();
-
-      if (data.length === 0) {
-        setHasMore(false);
-      } else {
-        setEvents((prevEvents) => [...prevEvents, ...data]);
-        setOffset((prevOffset) => prevOffset + 20); // Increment by 20 each time
-      }
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [offset, loading, hasMore]);
-  console.log(`offset: ${offset}, loading: ${loading}, hasMore: ${hasMore}`);
-
-  // Initial fetch and infinite scroll
-  useEffect(() => {
-    fetchEvents();
-  }, [fetchEvents]);
-
-  // Infinite scroll handler
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
-    ) {
-      fetchEvents();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    console.log("scrolling..");
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
-
+const EventList = ({ events }) => {
   return (
     <div>
-      <h2>Upcoming Events</h2>
-      <ul>
-        {events.map((event, index) => (
-          <li key={index}>
-            <h3>{event.title}</h3>
-            <p>
-              <strong>Date:</strong> {event.date}
-            </p>
-            <p>
-              <strong>Location:</strong> {event.location}
-            </p>
-            <p>{event.snippet}</p>
-            <a href={event.link} target="_blank" rel="noopener noreferrer">
-              View Event
-            </a>
-          </li>
-        ))}
-      </ul>
-      {loading && <p>Loading more events...</p>}
-      {!hasMore && <p>No more events to load.</p>}
+      {events.map((event, index) => (
+        <div key={index} className="event-card">
+          <h3>{event.title}</h3>
+          <p>{event.snippet}</p>
+          <p>
+            <strong>Date:</strong> {event.date}
+          </p>
+          <p>
+            <strong>Location:</strong> {event.location}
+          </p>
+          <a href={event.link} target="_blank" rel="noopener noreferrer">
+            View Event
+          </a>
+        </div>
+      ))}
     </div>
   );
 };
 
 export default EventList;
+
+// import React, { useEffect, useState, useCallback } from "react";
+
+// const EventList = () => {
+//   const [events, setEvents] = useState([]);
+//   const [offset, setOffset] = useState(0);
+//   const [loading, setLoading] = useState(false);
+//   const [hasMore, setHasMore] = useState(true);
+
+//   // Function to fetch events with pagination
+//   const fetchEvents = useCallback(async () => {
+//     if (loading || !hasMore) return;
+
+//     setLoading(true);
+//     try {
+//       const response = await fetch(
+//         `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=34.0522&lng=-118.2437&limit=20&offset=${offset}` // Los Angeles, CA
+//         // `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=44.9778&lng=-93.2650&limit=20&offset=${offset}` // Minneapolis, MN
+//       );
+//       const data = await response.json();
+
+//       if (data.length === 0) {
+//         setHasMore(false);
+//       } else {
+//         setEvents((prevEvents) => [...prevEvents, ...data]);
+//         setOffset((prevOffset) => prevOffset + 20); // Increment by 20 each time
+//       }
+//     } catch (error) {
+//       console.error("Error fetching events:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   }, [offset, loading, hasMore]);
+//   console.log(`offset: ${offset}, loading: ${loading}, hasMore: ${hasMore}`);
+
+//   // Initial fetch and infinite scroll
+//   useEffect(() => {
+//     fetchEvents();
+//   }, [fetchEvents]);
+
+//   // Infinite scroll handler
+//   const handleScroll = () => {
+//     if (
+//       window.innerHeight + document.documentElement.scrollTop + 1 >=
+//       document.documentElement.scrollHeight
+//     ) {
+//       fetchEvents();
+//     }
+//   };
+
+//   useEffect(() => {
+//     window.addEventListener("scroll", handleScroll);
+//     console.log("scrolling..");
+//     return () => window.removeEventListener("scroll", handleScroll);
+//   }, [handleScroll]);
+
+//   return (
+//     <div>
+//       <h1>Kovebox</h1>
+//       <p>Explore upcoming events related to Korean culture, K-pop, and Korean food.</p>
+//       <h2>Upcoming Events</h2>
+//       <ul>
+//         {events.map((event, index) => (
+//           <li key={index}>
+//             <h3>{event.title}</h3>
+//             <p>
+//               <strong>Date:</strong> {event.date}
+//             </p>
+//             <p>
+//               <strong>Location:</strong> {event.location}
+//             </p>
+//             <p>{event.snippet}</p>
+//             <a href={event.link} target="_blank" rel="noopener noreferrer">
+//               View Event
+//             </a>
+//           </li>
+//         ))}
+//       </ul>
+//       {loading && <p>Loading more events...</p>}
+//       {!hasMore && <p>No more events to load.</p>}
+//     </div>
+//   );
+// };
+
+// export default EventList;
 
 // import React, { useEffect, useState, useCallback } from "react";
 

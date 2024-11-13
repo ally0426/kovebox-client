@@ -1,6 +1,52 @@
-import EventList from "./User/EventList";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import EventList from "./EventList"; // Import the EventList component
 
 const HomePage = () => {
+  // Default to Los Angeles if geolocation is denied or unavailable
+  const defaultLocation = { lat: 34.0522, lng: -118.2437 }; // Los Angeles coordinates
+  const [location, setLocation] = useState(defaultLocation);
+  const [events, setEvents] = useState([]);
+  const [error, setError] = useState("");
+
+  // Function to fetch events based on the current location
+  const fetchEvents = async (lat, lng) => {
+    try {
+      const response = await axios.get(`/api/activities`, {
+        params: { lat, lng },
+      });
+      setEvents(response.data.events); // Assuming response data structure contains events array
+    } catch (err) {
+      console.error("Error fetching events:", err);
+      setError("Failed to fetch events");
+    }
+  };
+
+  useEffect(() => {
+    // Check for browser geolocation support
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setLocation(userLocation); // Set the user's location
+          fetchEvents(userLocation.lat, userLocation.lng); // Fetch events based on user's location
+        },
+        (error) => {
+          console.warn("Geolocation permission denied or unavailable:", error);
+          // Use default location if permission denied or geolocation fails
+          fetchEvents(defaultLocation.lat, defaultLocation.lng);
+        }
+      );
+    } else {
+      console.warn("Geolocation not supported by this browser.");
+      // Use default location if geolocation is not supported
+      fetchEvents(defaultLocation.lat, defaultLocation.lng);
+    }
+  }, []);
+
   return (
     <div>
       <h1>Welcome to Kovebox Events</h1>
@@ -8,12 +54,35 @@ const HomePage = () => {
         Explore upcoming events related to Korean culture, K-pop, and Korean
         food.
       </p>
-      <EventList />
+      <h2>Upcoming Events</h2>
+      {error && <p>{error}</p>}
+      {events.length > 0 ? (
+        <EventList events={events} />
+      ) : (
+        <p>No events found for this location.</p>
+      )}
     </div>
   );
 };
 
 export default HomePage;
+
+// import EventList from "./User/EventList";
+
+// const HomePage = () => {
+//   return (
+//     <div>
+//       <h1>Welcome to Kovebox Events</h1>
+//       <p>
+//         Explore upcoming events related to Korean culture, K-pop, and Korean
+//         food.
+//       </p>
+//       <EventList />
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 
 // // 1.
 // import React, { useEffect, useState } from "react";
