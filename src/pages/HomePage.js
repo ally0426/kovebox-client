@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EventList from "./EventList"; // Import the EventList component
+import EventList from "./User/EventList"; // Import the EventList component
 
 const HomePage = () => {
   // Default to Los Angeles if geolocation is denied or unavailable
