@@ -12,7 +12,7 @@ const HomePage = () => {
   // Function to fetch events based on the current location
   const fetchEvents = async (lat, lng) => {
     try {
-      const response = await axios.get(`/api/activities`, {
+      const response = await axios.get(`/api/events`, {
         params: { lat, lng },
       });
       setEvents(response.data.events); // Assuming response data structure contains events array
