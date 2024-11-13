@@ -13,7 +13,8 @@ const EventList = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=44.9778&lng=-93.2650&limit=20&offset=${offset}`
+        `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=34.0522&lng=-118.2437&limit=20&offset=${offset}` // Los Angeles, CA
+        // `${process.env.REACT_APP_API_BASE_URL}/api/events?lat=44.9778&lng=-93.2650&limit=20&offset=${offset}` // Minneapolis, MN
       );
       const data = await response.json();
 
