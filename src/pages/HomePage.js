@@ -15,7 +15,8 @@ const HomePage = () => {
       const response = await axios.get(`/api/events`, {
         params: { lat, lng },
       });
-      setEvents(response.data.events); // Assuming response data structure contains events array
+      console.log("API response: ${response.data}");
+      setEvents(response.data.events || []); // Assuming response data structure contains events array
     } catch (err) {
       console.error("Error fetching events:", err);
       setError("Failed to fetch events");
@@ -31,6 +32,7 @@ const HomePage = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
+          console.log(`user location: ${userLocation}`);
           setLocation(userLocation); // Set the user's location
           fetchEvents(userLocation.lat, userLocation.lng); // Fetch events based on user's location
         },
@@ -56,7 +58,7 @@ const HomePage = () => {
       </p>
       <h2>Upcoming Events</h2>
       {error && <p>{error}</p>}
-      {events.length > 0 ? (
+      {events && events.length > 0 ? (
         <EventList events={events} />
       ) : (
         <p>No events found for this location.</p>
