@@ -1,6 +1,7 @@
 import React from "react";
 
 const EventList = ({ events }) => {
+  console.log("returning events from EventList.js");
   return (
     <div>
       {events.map((event, index) => (
