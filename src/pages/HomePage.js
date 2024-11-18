@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EventList from "./EventList";
+import EventList from "./User/EventList";
 
 const HomePage = () => {
   const defaultLocation = { lat: 34.0522, lng: -118.2437 }; // Los Angeles coordinates
