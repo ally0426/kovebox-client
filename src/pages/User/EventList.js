@@ -1,7 +1,7 @@
 import React from "react";
 
 const EventList = ({ events }) => {
-  console.log("Events received in EventList:", events); // Log events to verify
+  console.log("Events received in EventList:", events); // Log the events
 
   if (!Array.isArray(events) || events.length === 0) {
     return <p>No events available.</p>;

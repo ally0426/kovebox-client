@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EventList from "./User/EventList";
+import EventList from "./EventList";
 
 const HomePage = () => {
   const defaultLocation = { lat: 34.0522, lng: -118.2437 }; // Los Angeles coordinates
@@ -14,8 +14,8 @@ const HomePage = () => {
       const response = await axios.get("/api/events", {
         params: { lat: location.lat, lng: location.lng },
       });
-      console.log("API response:", response.data); // Log the API response
-      setEvents(response.data.events || []); // Set events, fallback to empty array
+      console.log("Raw API response:", response.data); // Log the API response
+      setEvents(response.data || []); // Directly set the response data as events
     } catch (err) {
       console.error("Error fetching events:", err);
       setError("Failed to fetch events");
