@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EventList from "./User/EventList"; // Import the EventList component
+import EventList from "./EventList";
 
 const HomePage = () => {
-  // Default to Los Angeles if geolocation is denied or unavailable
   const defaultLocation = { lat: 34.0522, lng: -118.2437 }; // Los Angeles coordinates
   const [location, setLocation] = useState(defaultLocation);
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([]); // Initialize as empty array
   const [error, setError] = useState("");
 
-  // Function to fetch events based on the current location
-  const fetchEvents = async (lat, lng) => {
+  // Fetch events based on location
+  const fetchEvents = async () => {
     try {
-      const response = await axios.get(`/api/events`, {
-        params: { lat, lng },
+      const response = await axios.get("/api/events", {
+        params: { lat: location.lat, lng: location.lng },
       });
-      console.log("API response - event[0]: ${response.data.event[0]}");
-      setEvents(response.data.events || []); // Assuming response data structure contains events array
+      console.log("API response:", response.data); // Log the API response
+      setEvents(response.data.events || []); // Set events, fallback to empty array
     } catch (err) {
       console.error("Error fetching events:", err);
       setError("Failed to fetch events");
@@ -24,7 +23,6 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // Check for browser geolocation support
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -32,42 +30,102 @@ const HomePage = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          console.log(`user location: ${userLocation}`);
-          setLocation(userLocation); // Set the user's location
-          fetchEvents(userLocation.lat, userLocation.lng); // Fetch events based on user's location
+          setLocation(userLocation);
+          fetchEvents();
         },
         (error) => {
-          console.warn("Geolocation permission denied or unavailable:", error);
-          // Use default location if permission denied or geolocation fails
-          fetchEvents(defaultLocation.lat, defaultLocation.lng);
+          console.warn("Geolocation error:", error);
+          fetchEvents(); // Use default location
         }
       );
     } else {
-      console.warn("Geolocation not supported by this browser.");
-      // Use default location if geolocation is not supported
-      fetchEvents(defaultLocation.lat, defaultLocation.lng);
+      fetchEvents(); // Use default location if geolocation is unsupported
     }
   }, []);
 
   return (
     <div>
       <h1>Welcome to Kovebox Events</h1>
-      <p>
-        Explore upcoming events related to Korean culture, K-pop, and Korean
-        food.
-      </p>
-      <h2>Upcoming Events</h2>
+      <p>Explore Korean events near you!</p>
       {error && <p>{error}</p>}
-      {events && events.length > 0 ? (
-        <EventList events={events} />
-      ) : (
-        <p>No events found for this location.</p>
-      )}
+      {console.log("Events passed to EventList:", events)} {/* Log events */}
+      <EventList events={events} /> {/* Pass events as props */}
     </div>
   );
 };
 
 export default HomePage;
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import EventList from "./User/EventList"; // Import the EventList component
+
+// const HomePage = () => {
+//   // Default to Los Angeles if geolocation is denied or unavailable
+//   const defaultLocation = { lat: 34.0522, lng: -118.2437 }; // Los Angeles coordinates
+//   const [location, setLocation] = useState(defaultLocation);
+//   const [events, setEvents] = useState([]);
+//   const [error, setError] = useState("");
+
+//   // Function to fetch events based on the current location
+//   const fetchEvents = async (lat, lng) => {
+//     try {
+//       const response = await axios.get(`/api/events`, {
+//         params: { lat, lng },
+//       });
+//       console.log("API response - event[0]: ${response.data.event[0]}");
+//       setEvents(response.data.events || []); // Assuming response data structure contains events array
+//     } catch (err) {
+//       console.error("Error fetching events:", err);
+//       setError("Failed to fetch events");
+//     }
+//   };
+
+//   useEffect(() => {
+//     // Check for browser geolocation support
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition(
+//         (position) => {
+//           const userLocation = {
+//             lat: position.coords.latitude,
+//             lng: position.coords.longitude,
+//           };
+//           console.log(`user location: ${userLocation}`);
+//           setLocation(userLocation); // Set the user's location
+//           fetchEvents(userLocation.lat, userLocation.lng); // Fetch events based on user's location
+//         },
+//         (error) => {
+//           console.warn("Geolocation permission denied or unavailable:", error);
+//           // Use default location if permission denied or geolocation fails
+//           fetchEvents(defaultLocation.lat, defaultLocation.lng);
+//         }
+//       );
+//     } else {
+//       console.warn("Geolocation not supported by this browser.");
+//       // Use default location if geolocation is not supported
+//       fetchEvents(defaultLocation.lat, defaultLocation.lng);
+//     }
+//   }, []);
+
+//   return (
+//     <div>
+//       <h1>Welcome to Kovebox Events</h1>
+//       <p>
+//         Explore upcoming events related to Korean culture, K-pop, and Korean
+//         food.
+//       </p>
+//       <h2>Upcoming Events</h2>
+//       {error && <p>{error}</p>}
+//       {events && events.length > 0 ? (
+//         <EventList events={events} />
+//       ) : (
+//         <p>No events found for this location.</p>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 
 // import EventList from "./User/EventList";
 
