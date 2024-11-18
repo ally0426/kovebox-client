@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EventList from "./User/EventList"; // Correct file path for EventList
+import EventList from "./User/EventList"; // Correct path to EventList.js
 
 const HomePage = () => {
   const defaultLocation = { lat: 34.0522, lng: -118.2437 }; // Los Angeles coordinates
@@ -41,7 +41,7 @@ const HomePage = () => {
     } else {
       fetchEvents(); // Use default location if geolocation is unsupported
     }
-  }, []);
+  }, [location]); // Re-fetch events whenever location changes
 
   return (
     <div>
@@ -55,6 +55,64 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import EventList from "./User/EventList"; // Correct file path for EventList
+
+// const HomePage = () => {
+//   const defaultLocation = { lat: 34.0522, lng: -118.2437 }; // Los Angeles coordinates
+//   const [location, setLocation] = useState(defaultLocation);
+//   const [events, setEvents] = useState([]); // Initialize as an empty array
+//   const [error, setError] = useState("");
+
+//   // Fetch events based on location
+//   const fetchEvents = async () => {
+//     try {
+//       const response = await axios.get("/api/events", {
+//         params: { lat: location.lat, lng: location.lng },
+//       });
+//       console.log("API response:", response.data); // Log the API response
+//       setEvents(response.data || []); // Directly use the response data as the events array
+//     } catch (err) {
+//       console.error("Error fetching events:", err);
+//       setError("Failed to fetch events");
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition(
+//         (position) => {
+//           const userLocation = {
+//             lat: position.coords.latitude,
+//             lng: position.coords.longitude,
+//           };
+//           setLocation(userLocation);
+//           fetchEvents();
+//         },
+//         (error) => {
+//           console.warn("Geolocation error:", error);
+//           fetchEvents(); // Use default location
+//         }
+//       );
+//     } else {
+//       fetchEvents(); // Use default location if geolocation is unsupported
+//     }
+//   }, []);
+
+//   return (
+//     <div>
+//       <h1>Welcome to Kovebox Events</h1>
+//       <p>Explore Korean events near you!</p>
+//       {error && <p>{error}</p>}
+//       {console.log("Events passed to EventList:", events)} {/* Log events */}
+//       <EventList events={events} /> {/* Pass events directly */}
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";

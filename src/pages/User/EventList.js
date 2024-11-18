@@ -33,6 +33,38 @@ export default EventList;
 // import React from "react";
 
 // const EventList = ({ events }) => {
+//   console.log("Events received in EventList:", events); // Log the events
+
+//   if (!Array.isArray(events) || events.length === 0) {
+//     return <p>No events available.</p>;
+//   }
+
+//   return (
+//     <div>
+//       {events.map((event, index) => (
+//         <div key={index} className="event-card">
+//           <h3>{event.title}</h3>
+//           <p>{event.snippet}</p>
+//           <p>
+//             <strong>Date:</strong> {event.date}
+//           </p>
+//           <p>
+//             <strong>Location:</strong> {event.location}
+//           </p>
+//           <a href={event.link} target="_blank" rel="noopener noreferrer">
+//             View Event
+//           </a>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default EventList;
+
+// import React from "react";
+
+// const EventList = ({ events }) => {
 //   console.log("returning events from EventList.js");
 //   return (
 //     <div>
