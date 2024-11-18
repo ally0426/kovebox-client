@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EventList from "./User/EventList";
+import EventList from "./User/EventList"; // Correct file path for EventList
 
 const HomePage = () => {
   const defaultLocation = { lat: 34.0522, lng: -118.2437 }; // Los Angeles coordinates
   const [location, setLocation] = useState(defaultLocation);
-  const [events, setEvents] = useState([]); // Initialize as empty array
+  const [events, setEvents] = useState([]); // Initialize as an empty array
   const [error, setError] = useState("");
 
   // Fetch events based on location
@@ -14,8 +14,8 @@ const HomePage = () => {
       const response = await axios.get("/api/events", {
         params: { lat: location.lat, lng: location.lng },
       });
-      console.log("Raw API response:", response.data); // Log the API response
-      setEvents(response.data || []); // Directly set the response data as events
+      console.log("API response:", response.data); // Log the API response
+      setEvents(response.data || []); // Directly use the response data as the events array
     } catch (err) {
       console.error("Error fetching events:", err);
       setError("Failed to fetch events");
@@ -49,7 +49,7 @@ const HomePage = () => {
       <p>Explore Korean events near you!</p>
       {error && <p>{error}</p>}
       {console.log("Events passed to EventList:", events)} {/* Log events */}
-      <EventList events={events} /> {/* Pass events as props */}
+      <EventList events={events} /> {/* Pass events directly */}
     </div>
   );
 };
