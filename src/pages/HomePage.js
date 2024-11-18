@@ -15,7 +15,7 @@ const HomePage = () => {
       const response = await axios.get(`/api/events`, {
         params: { lat, lng },
       });
-      console.log("API response: ${response.data}");
+      console.log("API response - event[0]: ${response.data.event[0]}");
       setEvents(response.data.events || []); // Assuming response data structure contains events array
     } catch (err) {
       console.error("Error fetching events:", err);
