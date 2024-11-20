@@ -1,4 +1,30 @@
-.homepage {
+.image-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.image-card {
+  width: 200px;
+  text-align: center;
+}
+
+.image-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.image-card p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+
+/* .homepage {
   padding: 20px;
 }
 
@@ -65,4 +91,4 @@
   .card-container {
     grid-template-columns: repeat(1, 1fr);
   }
-}
+} */
