@@ -27,18 +27,20 @@ const HomePage = () => {
       <p>Explore K-pop and Korean cultural events near you!</p>
       {error && <p>{error}</p>}
       <div className="image-results">
-        {results.map((result, index) => (
-          <div key={index} className="image-card">
-            <a
-              href={result.contextLink}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src={result.link} alt={result.title} />
-            </a>
-            <p>{result.title}</p>
-          </div>
-        ))}
+        console.log('Results: ', results)
+        {results &&
+          results.map((result, index) => (
+            <div key={index} className="image-card">
+              <a
+                href={result.contextLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={result.link} alt={result.title} />
+              </a>
+              <p>{result.title}</p>
+            </div>
+          ))}
       </div>
     </div>
   );
