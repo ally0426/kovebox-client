@@ -1,52 +1,99 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import EventList from "./User/EventList"; // Path based on your setup
 
 const HomePage = () => {
-  const [results, setResults] = useState([]);
-  const [error, setError] = useState("");
-
-  const fetchSearchResults = async () => {
-    try {
-      const response = await axios.get("/api/search", {
-        params: { q: "kpop events Los Angeles this weekend" },
-      });
-      setResults(response.data);
-    } catch (err) {
-      console.error("Error fetching search results:", err);
-      setError("Failed to fetch results.");
-    }
-  };
+  const [events, setEvents] = useState([]); // Ensure `events` starts as an empty array
+  const [error, setError] = useState(""); // For error handling
 
   useEffect(() => {
-    fetchSearchResults();
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get(
+          "/api/search?q=Korean+events+Los+Angeles+this+weekend"
+        );
+        console.log("API Response:", response.data);
+
+        // Ensure `response.data` is an array before setting it
+        if (Array.isArray(response.data)) {
+          setEvents(response.data);
+        } else {
+          console.error("Unexpected response format:", response.data);
+          setEvents([]); // Default to an empty array
+        }
+      } catch (err) {
+        console.error("Error fetching events:", err.message);
+        setError("Failed to load events.");
+      }
+    };
+
+    fetchEvents();
   }, []);
+
+  // Show error message if there's an error
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div>
-      <h1>Welcome to Kovebox Events</h1>
-      <p>Explore K-pop and Korean cultural events near you!</p>
-      {error && <p>{error}</p>}
-      <div className="image-results">
-        console.log('Results: ', results)
-        {results &&
-          results.map((result, index) => (
-            <div key={index} className="image-card">
-              <a
-                href={result.contextLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={result.link} alt={result.title} />
-              </a>
-              <p>{result.title}</p>
-            </div>
-          ))}
-      </div>
+      <h1>Events</h1>
+      <EventList events={events} />
     </div>
   );
 };
 
 export default HomePage;
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+
+// const HomePage = () => {
+//   const [results, setResults] = useState([]);
+//   const [error, setError] = useState("");
+
+//   const fetchSearchResults = async () => {
+//     try {
+//       const response = await axios.get("/api/search", {
+//         params: { q: "kpop events Los Angeles this weekend" },
+//       });
+//       setResults(response.data);
+//     } catch (err) {
+//       console.error("Error fetching search results:", err);
+//       setError("Failed to fetch results.");
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchSearchResults();
+//   }, []);
+
+//   return (
+//     <div>
+//       <h1>Welcome to Kovebox Events</h1>
+//       <p>Explore K-pop and Korean cultural events near you!</p>
+//       {error && <p>{error}</p>}
+//       <div className="image-results">
+//         console.log('Results: ', results)
+//         {results &&
+//           results.map((result, index) => (
+//             <div key={index} className="image-card">
+//               <a
+//                 href={result.contextLink}
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//               >
+//                 <img src={result.link} alt={result.title} />
+//               </a>
+//               <p>{result.title}</p>
+//             </div>
+//           ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";

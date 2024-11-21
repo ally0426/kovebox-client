@@ -1,34 +1,66 @@
 import React from "react";
 
 const EventList = ({ events }) => {
-  console.log("Events received in EventList:", events); // Log the events
-
-  if (!Array.isArray(events) || events.length === 0) {
-    return <p>No events available.</p>;
+  // Ensure `events` is always an array
+  if (!Array.isArray(events)) {
+    console.error("Events is not an array:", events);
+    return <p>No events found or invalid data format.</p>;
   }
 
+  // Handle the case where the array is empty
+  if (events.length === 0) {
+    return <p>No events found.</p>;
+  }
+  console.log("Events in EventList.js: ", events);
+
   return (
-    <div>
+    <ul>
       {events.map((event, index) => (
-        <div key={index} className="event-card">
+        <li key={index}>
           <h3>{event.title}</h3>
           <p>{event.snippet}</p>
-          <p>
-            <strong>Date:</strong> {event.date}
-          </p>
-          <p>
-            <strong>Location:</strong> {event.location}
-          </p>
-          <a href={event.link} target="_blank" rel="noopener noreferrer">
-            View Event
+          <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+            Learn more
           </a>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
 
 export default EventList;
+
+// import React from "react";
+
+// const EventList = ({ events }) => {
+//   console.log("Events received in EventList:", events); // Log the events
+
+//   if (!Array.isArray(events) || events.length === 0) {
+//     return <p>No events available.</p>;
+//   }
+
+//   return (
+//     <div>
+//       {events.map((event, index) => (
+//         <div key={index} className="event-card">
+//           <h3>{event.title}</h3>
+//           <p>{event.snippet}</p>
+//           <p>
+//             <strong>Date:</strong> {event.date}
+//           </p>
+//           <p>
+//             <strong>Location:</strong> {event.location}
+//           </p>
+//           <a href={event.link} target="_blank" rel="noopener noreferrer">
+//             View Event
+//           </a>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default EventList;
 
 // import React from "react";
 
