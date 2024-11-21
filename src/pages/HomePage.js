@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EventList from "./User/EventList"; // Path based on your setup
+import EventList from "./User/EventList";
 
 const HomePage = () => {
-  const [events, setEvents] = useState([]); // Ensure `events` starts as an empty array
-  const [error, setError] = useState(""); // For error handling
+  const [events, setEvents] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -14,12 +14,11 @@ const HomePage = () => {
         );
         console.log("API Response:", response.data);
 
-        // Ensure `response.data` is an array before setting it
+        // Ensure `response.data` is an array
         if (Array.isArray(response.data)) {
           setEvents(response.data);
         } else {
-          console.error("Unexpected response format:", response.data);
-          setEvents([]); // Default to an empty array
+          throw new Error("Unexpected response format");
         }
       } catch (err) {
         console.error("Error fetching events:", err.message);
@@ -30,7 +29,6 @@ const HomePage = () => {
     fetchEvents();
   }, []);
 
-  // Show error message if there's an error
   if (error) {
     return <p>{error}</p>;
   }
@@ -44,6 +42,53 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import EventList from "./User/EventList"; // Path based on your setup
+
+// const HomePage = () => {
+//   const [events, setEvents] = useState([]); // Ensure `events` starts as an empty array
+//   const [error, setError] = useState(""); // For error handling
+
+//   useEffect(() => {
+//     const fetchEvents = async () => {
+//       try {
+//         const response = await axios.get(
+//           "/api/search?q=Korean+events+Los+Angeles+this+weekend"
+//         );
+//         console.log("API Response:", response.data);
+
+//         // Ensure `response.data` is an array before setting it
+//         if (Array.isArray(response.data)) {
+//           setEvents(response.data);
+//         } else {
+//           console.error("Unexpected response format:", response.data);
+//           setEvents([]); // Default to an empty array
+//         }
+//       } catch (err) {
+//         console.error("Error fetching events:", err.message);
+//         setError("Failed to load events.");
+//       }
+//     };
+
+//     fetchEvents();
+//   }, []);
+
+//   // Show error message if there's an error
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+//   return (
+//     <div>
+//       <h1>Events</h1>
+//       <EventList events={events} />
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
