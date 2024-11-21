@@ -10,35 +10,16 @@ const HomePage = () => {
     const fetchEvents = async () => {
       try {
         const response = await axios.get(
-          "/api/search?q=Korean+events+Los+Angeles+this+weekend"
+          "https://kovebox-server-90387d3b18a6.herokuapp.com/api/search?q=Korean+events+Los+Angeles+this+weekend"
         );
-        console.log("Raw HTML Response:", response.data);
+        console.log("API Response:", response.data);
 
-        // Parse HTML response
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(response.data, "text/html");
-
-        // Extract data manually (Example: Replace selectors based on actual HTML)
-        const titles = Array.from(doc.querySelectorAll("h3")).map(
-          (el) => el.textContent
-        );
-        const snippets = Array.from(doc.querySelectorAll("p")).map(
-          (el) => el.textContent
-        );
-        const links = Array.from(doc.querySelectorAll("a")).map(
-          (el) => el.href
-        );
-
-        // Combine into a structured array
-        const parsedEvents = titles.map((title, index) => ({
-          title,
-          snippet: snippets[index] || "No description available",
-          contextLink: links[index] || "#",
-        }));
-
-        console.log("Parsed Events:", parsedEvents);
-
-        setEvents(parsedEvents); // Set the parsed events
+        // Ensure `response.data` is an array
+        if (Array.isArray(response.data)) {
+          setEvents(response.data);
+        } else {
+          throw new Error("Unexpected response format");
+        }
       } catch (err) {
         console.error("Error fetching events:", err.message);
         setError("Failed to load events.");
@@ -61,51 +42,6 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import EventList from "./User/EventList";
-
-// const HomePage = () => {
-//   const [events, setEvents] = useState([]);
-//   const [error, setError] = useState("");
-
-//   useEffect(() => {
-//     const fetchEvents = async () => {
-//       try {
-//         const response = await axios.get(
-//           "/api/search?q=Korean+events+Los+Angeles+this+weekend"
-//         );
-//         console.log("API Response:", response.data);
-
-//         // Ensure `response.data` is an array
-//         if (Array.isArray(response.data)) {
-//           setEvents(response.data);
-//         } else {
-//           throw new Error("Unexpected response format");
-//         }
-//       } catch (err) {
-//         console.error("Error fetching events:", err.message);
-//         setError("Failed to load events.");
-//       }
-//     };
-
-//     fetchEvents();
-//   }, []);
-
-//   if (error) {
-//     return <p>{error}</p>;
-//   }
-
-//   return (
-//     <div>
-//       <h1>Events</h1>
-//       <EventList events={events} />
-//     </div>
-//   );
-// };
-
-// export default HomePage;
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
