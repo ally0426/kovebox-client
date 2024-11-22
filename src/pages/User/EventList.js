@@ -1,17 +1,14 @@
 import React from "react";
 
 const EventList = ({ events }) => {
-  // Ensure `events` is always an array
   if (!Array.isArray(events)) {
     console.error("Events is not an array:", events);
     return <p>No events found or invalid data format.</p>;
   }
 
-  // Handle the case where the array is empty
   if (events.length === 0) {
     return <p>No events found.</p>;
   }
-  console.log("Events in EventList.js: ", events);
 
   return (
     <ul>
@@ -29,6 +26,38 @@ const EventList = ({ events }) => {
 };
 
 export default EventList;
+
+// import React from "react";
+
+// const EventList = ({ events }) => {
+//   // Ensure `events` is always an array
+//   if (!Array.isArray(events)) {
+//     console.error("Events is not an array:", events);
+//     return <p>No events found or invalid data format.</p>;
+//   }
+
+//   // Handle the case where the array is empty
+//   if (events.length === 0) {
+//     return <p>No events found.</p>;
+//   }
+//   console.log("Events in EventList.js: ", events);
+
+//   return (
+//     <ul>
+//       {events.map((event, index) => (
+//         <li key={index}>
+//           <h3>{event.title}</h3>
+//           <p>{event.snippet}</p>
+//           <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+//             Learn more
+//           </a>
+//         </li>
+//       ))}
+//     </ul>
+//   );
+// };
+
+// export default EventList;
 
 // import React from "react";
 

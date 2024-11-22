@@ -44,10 +44,16 @@ const HomePage = () => {
     // Fetch events based on location and keywords
     const fetchEvents = async () => {
       try {
-        const query = `${keywords} in ${location}`;
         const response = await axios.get(
-          `https://kovebox-server.com/api/search?q=${encodeURIComponent(query)}`
+          `https://kovebox-server.com/api/search`,
+          {
+            params: {
+              q: keywords, // User-selected keywords
+              location, // User-selected or detected location
+            },
+          }
         );
+
         console.log("API Response:", response.data);
 
         if (Array.isArray(response.data)) {
@@ -62,7 +68,7 @@ const HomePage = () => {
     };
 
     fetchEvents();
-  }, [location, keywords]); // Refetch when location or keywords change
+  }, [keywords, location]); // Refetch when keywords or location change
 
   if (error) {
     return <p>{error}</p>;
