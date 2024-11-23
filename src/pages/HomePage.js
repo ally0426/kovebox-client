@@ -24,6 +24,10 @@ const HomePage = () => {
               );
               const data = await response.json();
               console.log("Google Geocoding Response:", data); // Log the full response
+              console.log(
+                "google geocoing api key",
+                process.env.REACT_APP_GOOGLE_GEOCODING_API_KEY
+              ); // Log the geocoding api key
 
               if (data.results.length > 0) {
                 // Extract city and state from the response
