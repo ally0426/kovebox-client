@@ -24,10 +24,15 @@ const HomePage = () => {
                 `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
               );
               const data = await response.json();
+              console.log("Reverse Gelocoding Response: ", data); // Log the full response for debugging
 
               const city =
-                data.address.city || data.address.town || "Los Angeles";
-              const state = data.address.state || "CA";
+                data.address.city ||
+                data.address.town ||
+                data.address.village ||
+                data.address.hamlet ||
+                "Unknown City";
+              const state = data.address.state || "UnKnown State";
               setLocation(`${city}, ${state}`);
               console.log("Detected location:", `${city}, ${state}`);
             } catch (err) {
