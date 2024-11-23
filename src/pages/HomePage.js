@@ -19,26 +19,53 @@ const HomePage = () => {
             console.log("User coordinates:", { lat, lon });
 
             try {
-              // Fetch location based on latitude and longitude
               const response = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=process.env.REACT_APP_GOOGLE_API_KEY`
               );
               const data = await response.json();
-              console.log("Reverse Gelocoding Response: ", data); // Log the full response for debugging
+              console.log("Google Geocoding Response:", data); // Log the full response
 
-              const city =
-                data.address.city ||
-                data.address.town ||
-                data.address.village ||
-                data.address.hamlet ||
-                "Unknown City";
-              const state = data.address.state || "UnKnown State";
-              setLocation(`${city}, ${state}`);
-              console.log("Detected location:", `${city}, ${state}`);
+              if (data.results.length > 0) {
+                // Extract city and state from the response
+                const components = data.results[0].address_components;
+                const city =
+                  components.find((c) => c.types.includes("locality"))
+                    ?.long_name || "Unknown City";
+                const state =
+                  components.find((c) =>
+                    c.types.includes("administrative_area_level_1")
+                  )?.short_name || "Unknown State";
+                setLocation(`${city}, ${state}`);
+                console.log("Detected location:", `${city}, ${state}`);
+              } else {
+                console.error("No location found from Google API");
+                setLocation("Los Angeles, CA"); // Fallback
+              }
             } catch (err) {
-              console.error("Error fetching location from coordinates:", err);
-              setLocation("Los Angeles, CA"); // Fallback to default
+              console.error("Error fetching location from Google API:", err);
+              setLocation("Los Angeles, CA"); // Fallback
             }
+            // try {
+            //   // Fetch location based on latitude and longitude
+            //   const response = await fetch(
+            //     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+            //   );
+            //   const data = await response.json();
+            //   console.log("Reverse Gelocoding Response: ", data); // Log the full response for debugging
+
+            //   const city =
+            //     data.address.city ||
+            //     data.address.town ||
+            //     data.address.village ||
+            //     data.address.hamlet ||
+            //     "Unknown City";
+            //   const state = data.address.state || "UnKnown State";
+            //   setLocation(`${city}, ${state}`);
+            //   console.log("Detected location:", `${city}, ${state}`);
+            // } catch (err) {
+            //   console.error("Error fetching location from coordinates:", err);
+            //   setLocation("Los Angeles, CA"); // Fallback to default
+            // }
           },
           (error) => {
             // Handle geolocation errors
@@ -133,7 +160,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <h1>Events</h1>
+      <h1>Events in {location}</h1>
       <div>
         <label>
           Location:
