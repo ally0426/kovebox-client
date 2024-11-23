@@ -44,15 +44,12 @@ const HomePage = () => {
     // Fetch events based on location and keywords
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(
-          `https://kovebox-server.com/api/search`,
-          {
-            params: {
-              q: keywords, // User-selected keywords
-              location, // User-selected or detected location
-            },
-          }
-        );
+        const query = `${keywords} in ${location}`;
+        const apiUrl = `https://kovebox-server-90387d3b18a6.herokuapp.com/api/search?q=${encodeURIComponent(
+          query
+        )}`;
+        console.log("Fetching from:", apiUrl); // Log the API URL for debugging
+        const response = await axios.get(apiUrl);
 
         console.log("API Response:", response.data);
 
@@ -111,6 +108,121 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import EventList from "./User/EventList";
+
+// const HomePage = () => {
+//   const [events, setEvents] = useState([]);
+//   const [location, setLocation] = useState("Los Angeles, CA"); // Default location
+//   const [keywords, setKeywords] = useState("Korean events"); // Default keyword
+//   const [error, setError] = useState("");
+
+//   useEffect(() => {
+//     // Detect user location
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition(
+//         (position) => {
+//           const lat = position.coords.latitude;
+//           const lon = position.coords.longitude;
+
+//           // Fetch location based on lat/lon
+//           fetch(
+//             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+//           )
+//             .then((res) => res.json())
+//             .then((data) => {
+//               const city =
+//                 data.address.city || data.address.town || "Los Angeles";
+//               const state = data.address.state || "CA";
+//               setLocation(`${city}, ${state}`);
+//             })
+//             .catch((err) => {
+//               console.error("Error fetching location:", err);
+//               setLocation("Los Angeles, CA"); // Fallback
+//             });
+//         },
+//         (error) => {
+//           console.error("Geolocation error:", error);
+//           setLocation("Los Angeles, CA"); // Fallback
+//         }
+//       );
+//     }
+//   }, []);
+
+//   useEffect(() => {
+//     // Fetch events based on location and keywords
+//     const fetchEvents = async () => {
+//       try {
+//         const response = await axios.get(
+//           `https://kovebox-server-90387d3b18a6.herokuapp.com/api/search`,
+//           {
+//             params: {
+//               q: keywords, // User-selected keywords
+//               location, // User-selected or detected location
+//             },
+//           }
+//         );
+
+//         console.log("API Response:", response.data);
+//         console.log(`location - keywords: ${location} - ${keywords}`);
+
+//         if (Array.isArray(response.data)) {
+//           setEvents(response.data);
+//         } else {
+//           throw new Error("Unexpected response format");
+//         }
+//       } catch (err) {
+//         console.error("Error fetching events:", err.message);
+//         setError("Failed to load events.");
+//       }
+//     };
+
+//     fetchEvents();
+//   }, [keywords, location]); // Refetch when keywords or location change
+
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+//   return (
+//     <div>
+//       <h1>Events</h1>
+//       <div>
+//         <label>
+//           Location:
+//           <input
+//             type="text"
+//             value={location}
+//             onChange={(e) => setLocation(e.target.value)}
+//             placeholder="Enter location"
+//           />
+//         </label>
+//         <label>
+//           Keywords:
+//           <select
+//             value={keywords}
+//             onChange={(e) => setKeywords(e.target.value)}
+//           >
+//             <option value="Korean events">Korean events</option>
+//             <option value="K-pop events">K-pop events</option>
+//             <option value="Korean cooking events">Korean cooking events</option>
+//             <option value="Korean cultural events">
+//               Korean cultural events
+//             </option>
+//             <option value="Korean language events">
+//               Korean language events
+//             </option>
+//           </select>
+//         </label>
+//       </div>
+//       <EventList events={events} />
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
