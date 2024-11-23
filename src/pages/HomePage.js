@@ -20,7 +20,7 @@ const HomePage = () => {
 
             try {
               const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=process.env.REACT_APP_GOOGLE_API_KEY`
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=process.env.REACT_APP_GOOGLE_GEOCODING_API_KEY`
               );
               const data = await response.json();
               console.log("Google Geocoding Response:", data); // Log the full response
