@@ -9,36 +9,91 @@ const HomePage = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Detect user location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
+    const detectLocation = async () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
 
-          // Fetch location based on lat/lon
-          fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-          )
-            .then((res) => res.json())
-            .then((data) => {
+            console.log("User coordinates:", { lat, lon });
+
+            try {
+              // Fetch location based on latitude and longitude
+              const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+              );
+              const data = await response.json();
+
               const city =
                 data.address.city || data.address.town || "Los Angeles";
               const state = data.address.state || "CA";
               setLocation(`${city}, ${state}`);
-            })
-            .catch((err) => {
-              console.error("Error fetching location:", err);
-              setLocation("Los Angeles, CA"); // Fallback
-            });
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-          setLocation("Los Angeles, CA"); // Fallback
-        }
-      );
-    }
+              console.log("Detected location:", `${city}, ${state}`);
+            } catch (err) {
+              console.error("Error fetching location from coordinates:", err);
+              setLocation("Los Angeles, CA"); // Fallback to default
+            }
+          },
+          (error) => {
+            // Handle geolocation errors
+            console.error("Geolocation error:", error.message);
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                console.error("User denied the request for Geolocation.");
+                break;
+              case error.POSITION_UNAVAILABLE:
+                console.error("Location information is unavailable.");
+                break;
+              case error.TIMEOUT:
+                console.error("The request to get user location timed out.");
+                break;
+              default:
+                console.error("An unknown error occurred.");
+            }
+            setLocation("Los Angeles, CA"); // Fallback to default
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+        setLocation("Los Angeles, CA"); // Fallback to default
+      }
+    };
+
+    detectLocation();
   }, []);
+
+  // useEffect(() => {
+  //   // Detect user location
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         const lat = position.coords.latitude;
+  //         const lon = position.coords.longitude;
+
+  //         // Fetch location based on lat/lon
+  //         fetch(
+  //           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+  //         )
+  //           .then((res) => res.json())
+  //           .then((data) => {
+  //             const city =
+  //               data.address.city || data.address.town || "Los Angeles";
+  //             const state = data.address.state || "CA";
+  //             setLocation(`${city}, ${state}`);
+  //           })
+  //           .catch((err) => {
+  //             console.error("Error fetching location:", err);
+  //             setLocation("Los Angeles, CA"); // Fallback
+  //           });
+  //       },
+  //       (error) => {
+  //         console.error("Geolocation error:", error);
+  //         setLocation("Los Angeles, CA"); // Fallback
+  //       }
+  //     );
+  //   }
+  // }, []);
 
   useEffect(() => {
     // Fetch events based on location and keywords
