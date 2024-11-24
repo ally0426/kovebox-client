@@ -90,7 +90,7 @@ const HomePage = () => {
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="Enter location"
+            placeholder="Enter city, state to search"
           />
         </label>
         <label>
@@ -103,7 +103,7 @@ const HomePage = () => {
             <option value="K-pop events">K-pop events</option>
             <option value="Korean cooking events">Korean cooking events</option>
             <option value="Korean cultural events">
-              Korean cultural events
+              Korean courses events
             </option>
             <option value="Korean language events">
               Korean language events

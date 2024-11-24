@@ -2,7 +2,8 @@
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import EventList from "./pages/User/EventList";
+// import EventList from "./pages/User/EventList";
+import EventDetail from "./pages/User/EventDetail";
 
 import "./App.css";
 
@@ -11,13 +12,26 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/events" element={<EventList />} />
+        <Route path="/event/:id" element={<EventDetail />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
+// function App() {
+//   return (
+//     <Router>
+//       <Routes>
+//         <Route path="/" element={<HomePage />} />
+//         <Route path="/events" element={<EventList />} />
+//       </Routes>
+//     </Router>
+//   );
+// }
+
+// export default App;
 
 // 2.
 // import React from "react";

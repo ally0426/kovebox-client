@@ -1,33 +1,74 @@
 import React from "react";
+import "./EventList.css";
+import { useNavigate } from "react-router-dom";
 
 const EventList = ({ events }) => {
-  // Validate `events` to ensure it's an array
-  if (!Array.isArray(events)) {
-    console.error("Events is not an array:", events);
-    return <p>No events found or invalid data format.</p>;
-  }
+  const navigate = useNavigate();
 
-  // Handle empty array case
-  if (events.length === 0) {
+  if (!Array.isArray(events) || events.length === 0) {
     return <p>No events found.</p>;
   }
 
+  const handleEventClick = (eventId) => {
+    navigate(`/event/${eventId}`); // Navigate to the detail page for the event
+  };
+
   return (
-    <ul>
+    <div className="event-grid">
       {events.map((event, index) => (
-        <li key={index}>
-          <h3>{event.title}</h3>
-          <p>{event.snippet}</p>
-          <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
-            Learn more
-          </a>
-        </li>
+        <div
+          key={index}
+          className="event-card"
+          onClick={() => handleEventClick(event.id)} // Assuming `event.id` uniquely identifies the event
+        >
+          {event.image?.[0] ? (
+            <img
+              src={event.image[0]}
+              alt={event.title}
+              className="event-image"
+            />
+          ) : (
+            <div className="no-image-placeholder">{event.title}</div>
+          )}
+          <h3 className="event-title">{event.title}</h3>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 };
 
 export default EventList;
+
+// import React from "react";
+
+// const EventList = ({ events }) => {
+//   // Validate `events` to ensure it's an array
+//   if (!Array.isArray(events)) {
+//     console.error("Events is not an array:", events);
+//     return <p>No events found or invalid data format.</p>;
+//   }
+
+//   // Handle empty array case
+//   if (events.length === 0) {
+//     return <p>No events found.</p>;
+//   }
+
+//   return (
+//     <ul>
+//       {events.map((event, index) => (
+//         <li key={index}>
+//           <h3>{event.title}</h3>
+//           <p>{event.snippet}</p>
+//           <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+//             Learn more
+//           </a>
+//         </li>
+//       ))}
+//     </ul>
+//   );
+// };
+
+// export default EventList;
 
 // import React from "react";
 
