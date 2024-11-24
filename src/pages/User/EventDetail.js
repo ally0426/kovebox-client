@@ -64,13 +64,12 @@ const EventDetail = () => {
     // location: "123 Main St, Los Angeles, CA",
   };
   console.log(`EVENT: ${JSON.stringify(event, null, 2)}`);
-  console.log(`event: ${event}`);
 
   return (
     <div>
       <h1>{event.title}</h1>
-      <p> - {event.snippet}</p> // event description
-      <p>{event.link}</p> // event image
+      <p>{event.snippet}</p>
+      <p>{event.link}</p>
       <p>Event Page: {event.contextLink}</p>
       {/* <p>Date: {event.date}</p>
       <p>Location: {event.location}</p> */}

@@ -28,9 +28,9 @@ const EventList = ({ events }) => {
           ) : (
             <div className="no-image-placeholder">{event.title}</div>
           )}
-          <h3>{event.title}</h3>
+          {/* <h3>{event.title}</h3>
           <p>{event.snippet}</p>
-          <p>Event Page:{event.contextLink}</p>
+          <p>Event Page:{event.contextLink}</p> */}
           {/* <p>{event.date || "Date not available"}</p>
           <p>{event.location || "Location not available"}</p> */}
         </div>
