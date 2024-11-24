@@ -1,3 +1,46 @@
+import React from "react";
+import "./EventList.css";
+import { useNavigate } from "react-router-dom";
+
+const EventList = ({ events }) => {
+  const navigate = useNavigate();
+
+  if (!Array.isArray(events) || events.length === 0) {
+    return <p>No events found.</p>;
+  }
+
+  const handleEventClick = (eventId) => {
+    navigate(`/event/${eventId}`); // Navigate to the detail page
+  };
+
+  return (
+    <div className="event-grid">
+      {events.map((event, index) => (
+        <div
+          key={index}
+          className="event-card"
+          onClick={() => handleEventClick(event.id)}
+        >
+          {event.images?.[0] ? (
+            <img
+              src={event.images[0]}
+              alt={event.title}
+              className="event-image"
+            />
+          ) : (
+            <div className="no-image-placeholder">{event.title}</div>
+          )}
+          <h3>{event.title}</h3>
+          <p>{event.date || "Date not available"}</p>
+          <p>{event.location || "Location not available"}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default EventList;
+
 // import React from "react";
 // import "./EventList.css";
 // import { useNavigate } from "react-router-dom";
@@ -41,46 +84,46 @@
 
 // export default EventList;
 
-import React from "react";
-import "./EventList.css";
-import { useNavigate } from "react-router-dom";
+// import React from "react";
+// import "./EventList.css";
+// import { useNavigate } from "react-router-dom";
 
-const EventList = ({ events }) => {
-  const navigate = useNavigate();
+// const EventList = ({ events }) => {
+//   const navigate = useNavigate();
 
-  if (!Array.isArray(events) || events.length === 0) {
-    return <p>No events found.</p>;
-  }
+//   if (!Array.isArray(events) || events.length === 0) {
+//     return <p>No events found.</p>;
+//   }
 
-  const handleEventClick = (eventId) => {
-    navigate(`/event/${eventId}`); // Navigate to the detail page for the event
-  };
+//   const handleEventClick = (eventId) => {
+//     navigate(`/event/${eventId}`); // Navigate to the detail page for the event
+//   };
 
-  return (
-    <div className="event-grid">
-      {events.map((event, index) => (
-        <div
-          key={index}
-          className="event-card"
-          onClick={() => handleEventClick(event.id)} // Assuming `event.id` uniquely identifies the event
-        >
-          {event.images ? (
-            <img
-              src={event.images[0]}
-              alt={event.title}
-              className="event-image"
-            />
-          ) : (
-            <div className="no-image-placeholder">{event.title}</div>
-          )}
-          <h3 className="event-title">{event.title}</h3>
-        </div>
-      ))}
-    </div>
-  );
-};
+//   return (
+//     <div className="event-grid">
+//       {events.map((event, index) => (
+//         <div
+//           key={index}
+//           className="event-card"
+//           onClick={() => handleEventClick(event.id)} // Assuming `event.id` uniquely identifies the event
+//         >
+//           {event.images ? (
+//             <img
+//               src={event.images[0]}
+//               alt={event.title}
+//               className="event-image"
+//             />
+//           ) : (
+//             <div className="no-image-placeholder">{event.title}</div>
+//           )}
+//           <h3 className="event-title">{event.title}</h3>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
 
-export default EventList;
+// export default EventList;
 
 // import React from "react";
 
