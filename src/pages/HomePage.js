@@ -25,7 +25,7 @@ const HomePage = () => {
           try {
             // Fetch geolocation from the backend
             const response = await axios.get(
-              `https://kovebox-server.com/api/geolocation`,
+              `https://kovebox-server-90387d3b18a6.herokuapp.com/api/geolocation`,
               {
                 params: { lat, lon },
               }
@@ -54,7 +54,7 @@ const HomePage = () => {
     const fetchEvents = async () => {
       try {
         const query = `${keywords} in ${location}`;
-        const apiUrl = `https://kovebox-server.com/api/search?q=${encodeURIComponent(
+        const apiUrl = `https://kovebox-server-90387d3b18a6.herokuapp.com/api/search?q=${encodeURIComponent(
           query
         )}`;
         console.log("Fetching from:", apiUrl); // Log the API URL for debugging
