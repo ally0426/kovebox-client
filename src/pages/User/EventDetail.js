@@ -60,9 +60,6 @@ const EventDetail = () => {
   // Placeholder example:
   const event = {
     id,
-    snippet,
-    link,
-    contextLink,
     // date: "2024-11-20",
     // location: "123 Main St, Los Angeles, CA",
   };
