@@ -9,134 +9,52 @@ const HomePage = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const detectLocation = async () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-
-            console.log("User coordinates:", { lat, lon });
-
-            try {
-              const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=process.env.REACT_APP_GOOGLE_GEOCODING_API_KEY`
-              );
-              const data = await response.json();
-              console.log("Google Geocoding Response:", data); // Log the full response
-              console.log(
-                "google geocoing api key",
-                process.env.REACT_APP_GOOGLE_GEOCODING_API_KEY
-              ); // Log the geocoding api key
-
-              if (data.results.length > 0) {
-                // Extract city and state from the response
-                const components = data.results[0].address_components;
-                const city =
-                  components.find((c) => c.types.includes("locality"))
-                    ?.long_name || "Unknown City";
-                const state =
-                  components.find((c) =>
-                    c.types.includes("administrative_area_level_1")
-                  )?.short_name || "Unknown State";
-                setLocation(`${city}, ${state}`);
-                console.log("Detected location:", `${city}, ${state}`);
-              } else {
-                console.error("No location found from Google API");
-                setLocation("Los Angeles, CA"); // Fallback
-              }
-            } catch (err) {
-              console.error("Error fetching location from Google API:", err);
-              setLocation("Los Angeles, CA"); // Fallback
-            }
-            // try {
-            //   // Fetch location based on latitude and longitude
-            //   const response = await fetch(
-            //     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-            //   );
-            //   const data = await response.json();
-            //   console.log("Reverse Gelocoding Response: ", data); // Log the full response for debugging
-
-            //   const city =
-            //     data.address.city ||
-            //     data.address.town ||
-            //     data.address.village ||
-            //     data.address.hamlet ||
-            //     "Unknown City";
-            //   const state = data.address.state || "UnKnown State";
-            //   setLocation(`${city}, ${state}`);
-            //   console.log("Detected location:", `${city}, ${state}`);
-            // } catch (err) {
-            //   console.error("Error fetching location from coordinates:", err);
-            //   setLocation("Los Angeles, CA"); // Fallback to default
-            // }
-          },
-          (error) => {
-            // Handle geolocation errors
-            console.error("Geolocation error:", error.message);
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                console.error("User denied the request for Geolocation.");
-                break;
-              case error.POSITION_UNAVAILABLE:
-                console.error("Location information is unavailable.");
-                break;
-              case error.TIMEOUT:
-                console.error("The request to get user location timed out.");
-                break;
-              default:
-                console.error("An unknown error occurred.");
-            }
-            setLocation("Los Angeles, CA"); // Fallback to default
-          }
-        );
-      } else {
+    const fetchLocation = async () => {
+      if (!navigator.geolocation) {
         console.error("Geolocation is not supported by this browser.");
-        setLocation("Los Angeles, CA"); // Fallback to default
+        setLocation("Los Angeles, CA"); // Fallback
+        return;
       }
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          console.log("User Coordinates:", { lat, lon });
+
+          try {
+            // Fetch geolocation from the backend
+            const response = await axios.get(
+              `https://kovebox-server.com/api/geolocation`,
+              {
+                params: { lat, lon },
+              }
+            );
+
+            const { city, state } = response.data;
+            setLocation(`${city}, ${state}`);
+            console.log("Detected Location:", `${city}, ${state}`);
+          } catch (err) {
+            console.error("Error fetching geolocation:", err.message);
+            setLocation("Los Angeles, CA"); // Fallback
+          }
+        },
+        (error) => {
+          console.error("Geolocation error:", error.message);
+          setLocation("Los Angeles, CA"); // Fallback
+        }
+      );
     };
 
-    detectLocation();
+    fetchLocation();
   }, []);
-
-  // useEffect(() => {
-  //   // Detect user location
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         const lat = position.coords.latitude;
-  //         const lon = position.coords.longitude;
-
-  //         // Fetch location based on lat/lon
-  //         fetch(
-  //           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-  //         )
-  //           .then((res) => res.json())
-  //           .then((data) => {
-  //             const city =
-  //               data.address.city || data.address.town || "Los Angeles";
-  //             const state = data.address.state || "CA";
-  //             setLocation(`${city}, ${state}`);
-  //           })
-  //           .catch((err) => {
-  //             console.error("Error fetching location:", err);
-  //             setLocation("Los Angeles, CA"); // Fallback
-  //           });
-  //       },
-  //       (error) => {
-  //         console.error("Geolocation error:", error);
-  //         setLocation("Los Angeles, CA"); // Fallback
-  //       }
-  //     );
-  //   }
-  // }, []);
 
   useEffect(() => {
     // Fetch events based on location and keywords
     const fetchEvents = async () => {
       try {
         const query = `${keywords} in ${location}`;
-        const apiUrl = `https://kovebox-server-90387d3b18a6.herokuapp.com/api/search?q=${encodeURIComponent(
+        const apiUrl = `https://kovebox-server.com/api/search?q=${encodeURIComponent(
           query
         )}`;
         console.log("Fetching from:", apiUrl); // Log the API URL for debugging
@@ -164,7 +82,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <h1>Events in {location}</h1>
+      <h1>Events</h1>
       <div>
         <label>
           Location:
@@ -199,6 +117,208 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import EventList from "./User/EventList";
+
+// const HomePage = () => {
+//   const [events, setEvents] = useState([]);
+//   const [location, setLocation] = useState("Los Angeles, CA"); // Default location
+//   const [keywords, setKeywords] = useState("Korean events"); // Default keyword
+//   const [error, setError] = useState("");
+
+//   useEffect(() => {
+//     const detectLocation = async () => {
+//       if (navigator.geolocation) {
+//         navigator.geolocation.getCurrentPosition(
+//           async (position) => {
+//             const lat = position.coords.latitude;
+//             const lon = position.coords.longitude;
+
+//             console.log("User coordinates:", { lat, lon });
+
+//             try {
+//               const response = await fetch(
+//                 `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=process.env.REACT_APP_GOOGLE_GEOCODING_API_KEY`
+//               );
+//               const data = await response.json();
+//               console.log("Google Geocoding Response:", data); // Log the full response
+//               console.log(
+//                 "google geocoing api key",
+//                 process.env.REACT_APP_GOOGLE_GEOCODING_API_KEY
+//               ); // Log the geocoding api key
+
+//               if (data.results.length > 0) {
+//                 // Extract city and state from the response
+//                 const components = data.results[0].address_components;
+//                 const city =
+//                   components.find((c) => c.types.includes("locality"))
+//                     ?.long_name || "Unknown City";
+//                 const state =
+//                   components.find((c) =>
+//                     c.types.includes("administrative_area_level_1")
+//                   )?.short_name || "Unknown State";
+//                 setLocation(`${city}, ${state}`);
+//                 console.log("Detected location:", `${city}, ${state}`);
+//               } else {
+//                 console.error("No location found from Google API");
+//                 setLocation("Los Angeles, CA"); // Fallback
+//               }
+//             } catch (err) {
+//               console.error("Error fetching location from Google API:", err);
+//               setLocation("Los Angeles, CA"); // Fallback
+//             }
+//             // try {
+//             //   // Fetch location based on latitude and longitude
+//             //   const response = await fetch(
+//             //     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+//             //   );
+//             //   const data = await response.json();
+//             //   console.log("Reverse Gelocoding Response: ", data); // Log the full response for debugging
+
+//             //   const city =
+//             //     data.address.city ||
+//             //     data.address.town ||
+//             //     data.address.village ||
+//             //     data.address.hamlet ||
+//             //     "Unknown City";
+//             //   const state = data.address.state || "UnKnown State";
+//             //   setLocation(`${city}, ${state}`);
+//             //   console.log("Detected location:", `${city}, ${state}`);
+//             // } catch (err) {
+//             //   console.error("Error fetching location from coordinates:", err);
+//             //   setLocation("Los Angeles, CA"); // Fallback to default
+//             // }
+//           },
+//           (error) => {
+//             // Handle geolocation errors
+//             console.error("Geolocation error:", error.message);
+//             switch (error.code) {
+//               case error.PERMISSION_DENIED:
+//                 console.error("User denied the request for Geolocation.");
+//                 break;
+//               case error.POSITION_UNAVAILABLE:
+//                 console.error("Location information is unavailable.");
+//                 break;
+//               case error.TIMEOUT:
+//                 console.error("The request to get user location timed out.");
+//                 break;
+//               default:
+//                 console.error("An unknown error occurred.");
+//             }
+//             setLocation("Los Angeles, CA"); // Fallback to default
+//           }
+//         );
+//       } else {
+//         console.error("Geolocation is not supported by this browser.");
+//         setLocation("Los Angeles, CA"); // Fallback to default
+//       }
+//     };
+
+//     detectLocation();
+//   }, []);
+
+//   // useEffect(() => {
+//   //   // Detect user location
+//   //   if (navigator.geolocation) {
+//   //     navigator.geolocation.getCurrentPosition(
+//   //       (position) => {
+//   //         const lat = position.coords.latitude;
+//   //         const lon = position.coords.longitude;
+
+//   //         // Fetch location based on lat/lon
+//   //         fetch(
+//   //           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+//   //         )
+//   //           .then((res) => res.json())
+//   //           .then((data) => {
+//   //             const city =
+//   //               data.address.city || data.address.town || "Los Angeles";
+//   //             const state = data.address.state || "CA";
+//   //             setLocation(`${city}, ${state}`);
+//   //           })
+//   //           .catch((err) => {
+//   //             console.error("Error fetching location:", err);
+//   //             setLocation("Los Angeles, CA"); // Fallback
+//   //           });
+//   //       },
+//   //       (error) => {
+//   //         console.error("Geolocation error:", error);
+//   //         setLocation("Los Angeles, CA"); // Fallback
+//   //       }
+//   //     );
+//   //   }
+//   // }, []);
+
+//   useEffect(() => {
+//     // Fetch events based on location and keywords
+//     const fetchEvents = async () => {
+//       try {
+//         const query = `${keywords} in ${location}`;
+//         const apiUrl = `https://kovebox-server-90387d3b18a6.herokuapp.com/api/search?q=${encodeURIComponent(
+//           query
+//         )}`;
+//         console.log("Fetching from:", apiUrl); // Log the API URL for debugging
+//         const response = await axios.get(apiUrl);
+
+//         console.log("API Response:", response.data);
+
+//         if (Array.isArray(response.data)) {
+//           setEvents(response.data);
+//         } else {
+//           throw new Error("Unexpected response format");
+//         }
+//       } catch (err) {
+//         console.error("Error fetching events:", err.message);
+//         setError("Failed to load events.");
+//       }
+//     };
+
+//     fetchEvents();
+//   }, [keywords, location]); // Refetch when keywords or location change
+
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+//   return (
+//     <div>
+//       <h1>Events in {location}</h1>
+//       <div>
+//         <label>
+//           Location:
+//           <input
+//             type="text"
+//             value={location}
+//             onChange={(e) => setLocation(e.target.value)}
+//             placeholder="Enter location"
+//           />
+//         </label>
+//         <label>
+//           Keywords:
+//           <select
+//             value={keywords}
+//             onChange={(e) => setKeywords(e.target.value)}
+//           >
+//             <option value="Korean events">Korean events</option>
+//             <option value="K-pop events">K-pop events</option>
+//             <option value="Korean cooking events">Korean cooking events</option>
+//             <option value="Korean cultural events">
+//               Korean cultural events
+//             </option>
+//             <option value="Korean language events">
+//               Korean language events
+//             </option>
+//           </select>
+//         </label>
+//       </div>
+//       <EventList events={events} />
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
