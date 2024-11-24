@@ -13,6 +13,8 @@ const EventDetail = () => {
     date: "2024-11-20",
     location: "123 Main St, Los Angeles, CA",
   };
+  console.log(`EVENT: ${JSON.stringify(event)}`);
+  console.log(`event: ${event}`);
 
   return (
     <div>
