@@ -60,22 +60,23 @@ const EventDetail = () => {
   // Placeholder example:
   const event = {
     id,
-    title: "Example Event Title",
-    description: "Detailed description of the event goes here.",
-    date: "2024-11-20",
-    location: "123 Main St, Los Angeles, CA",
+    snippet,
+    link,
+    contextLink,
+    // date: "2024-11-20",
+    // location: "123 Main St, Los Angeles, CA",
   };
-  console.log(`EVENT: ${JSON.stringify(event)}`);
+  console.log(`EVENT: ${JSON.stringify(event, null, 2)}`);
   console.log(`event: ${event}`);
 
   return (
     <div>
       <h1>{event.title}</h1>
-      <p>{event.snipple}</p>
-      {/* <p>{event.description}</p> */}
-      <p>Link: {event.link}</p>
-      <p>Date: {event.date}</p>
-      <p>Location: {event.location}</p>
+      <p> - {event.snippet}</p> // event description
+      <p>{event.link}</p> // event image
+      <p>Event Page: {event.contextLink}</p>
+      {/* <p>Date: {event.date}</p>
+      <p>Location: {event.location}</p> */}
     </div>
   );
 };

@@ -21,16 +21,14 @@ const EventList = ({ events }) => {
           className="event-card"
           onClick={() => handleEventClick(event.id)}
         >
-          {event.images?.[0] ? (
-            <img
-              src={event.images[0]}
-              alt={event.title}
-              className="event-image"
-            />
+          {event.link ? (
+            <img src={event.link} alt={event.title} className="event-image" />
           ) : (
             <div className="no-image-placeholder">{event.title}</div>
           )}
           <h3>{event.title}</h3>
+          <p>{event.snippet}</p>
+          <p>Event Page:{event.contextLink}</p>
           <p>{event.date || "Date not available"}</p>
           <p>{event.location || "Location not available"}</p>
         </div>
