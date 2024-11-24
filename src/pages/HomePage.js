@@ -9,55 +9,13 @@ const HomePage = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchLocation = async () => {
-      if (!navigator.geolocation) {
-        console.error("Geolocation is not supported by this browser.");
-        setLocation("Los Angeles, CA"); // Fallback
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          console.log("User Coordinates:", { lat, lon });
-
-          try {
-            // Fetch geolocation from the backend
-            const response = await axios.get(
-              `https://kovebox-server-90387d3b18a6.herokuapp.com/api/geolocation`,
-              {
-                params: { lat, lon },
-              }
-            );
-
-            const { city, state } = response.data;
-            setLocation(`${city}, ${state}`);
-            console.log("Detected Location:", `${city}, ${state}`);
-          } catch (err) {
-            console.error("Error fetching geolocation:", err.message);
-            setLocation("Los Angeles, CA"); // Fallback
-          }
-        },
-        (error) => {
-          console.error("Geolocation error:", error.message);
-          setLocation("Los Angeles, CA"); // Fallback
-        }
-      );
-    };
-
-    fetchLocation();
-  }, []);
-
-  useEffect(() => {
-    // Fetch events based on location and keywords
     const fetchEvents = async () => {
       try {
         const query = `${keywords} in ${location}`;
         const apiUrl = `https://kovebox-server-90387d3b18a6.herokuapp.com/api/search?q=${encodeURIComponent(
           query
         )}`;
-        console.log("Fetching from:", apiUrl); // Log the API URL for debugging
+        console.log("Fetching from:", apiUrl); // Debugging log
         const response = await axios.get(apiUrl);
 
         console.log("API Response:", response.data);
@@ -74,7 +32,7 @@ const HomePage = () => {
     };
 
     fetchEvents();
-  }, [keywords, location]); // Refetch when keywords or location change
+  }, [keywords, location]);
 
   if (error) {
     return <p>{error}</p>;
@@ -90,7 +48,7 @@ const HomePage = () => {
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="Enter city, state to search"
+            placeholder="Enter location"
           />
         </label>
         <label>
@@ -102,9 +60,7 @@ const HomePage = () => {
             <option value="Korean events">Korean events</option>
             <option value="K-pop events">K-pop events</option>
             <option value="Korean cooking events">Korean cooking events</option>
-            <option value="Korean cultural events">
-              Korean courses events
-            </option>
+            <option value="Korean course events">Korean course events</option>
             <option value="Korean language events">
               Korean language events
             </option>
@@ -117,6 +73,126 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import EventList from "./User/EventList";
+
+// const HomePage = () => {
+//   const [events, setEvents] = useState([]);
+//   const [location, setLocation] = useState("Los Angeles, CA"); // Default location
+//   const [keywords, setKeywords] = useState("Korean events"); // Default keyword
+//   const [error, setError] = useState("");
+
+//   useEffect(() => {
+//     const fetchLocation = async () => {
+//       if (!navigator.geolocation) {
+//         console.error("Geolocation is not supported by this browser.");
+//         setLocation("Los Angeles, CA"); // Fallback
+//         return;
+//       }
+
+//       navigator.geolocation.getCurrentPosition(
+//         async (position) => {
+//           const lat = position.coords.latitude;
+//           const lon = position.coords.longitude;
+//           console.log("User Coordinates:", { lat, lon });
+
+//           try {
+//             // Fetch geolocation from the backend
+//             const response = await axios.get(
+//               `https://kovebox-server-90387d3b18a6.herokuapp.com/api/geolocation`,
+//               {
+//                 params: { lat, lon },
+//               }
+//             );
+
+//             const { city, state } = response.data;
+//             setLocation(`${city}, ${state}`);
+//             console.log("Detected Location:", `${city}, ${state}`);
+//           } catch (err) {
+//             console.error("Error fetching geolocation:", err.message);
+//             setLocation("Los Angeles, CA"); // Fallback
+//           }
+//         },
+//         (error) => {
+//           console.error("Geolocation error:", error.message);
+//           setLocation("Los Angeles, CA"); // Fallback
+//         }
+//       );
+//     };
+
+//     fetchLocation();
+//   }, []);
+
+//   useEffect(() => {
+//     // Fetch events based on location and keywords
+//     const fetchEvents = async () => {
+//       try {
+//         const query = `${keywords} in ${location}`;
+//         const apiUrl = `https://kovebox-server-90387d3b18a6.herokuapp.com/api/search?q=${encodeURIComponent(
+//           query
+//         )}`;
+//         console.log("Fetching from:", apiUrl); // Log the API URL for debugging
+//         const response = await axios.get(apiUrl);
+
+//         console.log("API Response:", response.data);
+
+//         if (Array.isArray(response.data)) {
+//           setEvents(response.data);
+//         } else {
+//           throw new Error("Unexpected response format");
+//         }
+//       } catch (err) {
+//         console.error("Error fetching events:", err.message);
+//         setError("Failed to load events.");
+//       }
+//     };
+
+//     fetchEvents();
+//   }, [keywords, location]); // Refetch when keywords or location change
+
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+//   return (
+//     <div>
+//       <h1>Events</h1>
+//       <div>
+//         <label>
+//           Location:
+//           <input
+//             type="text"
+//             value={location}
+//             onChange={(e) => setLocation(e.target.value)}
+//             placeholder="Enter city, state to search"
+//           />
+//         </label>
+//         <label>
+//           Keywords:
+//           <select
+//             value={keywords}
+//             onChange={(e) => setKeywords(e.target.value)}
+//           >
+//             <option value="Korean events">Korean events</option>
+//             <option value="K-pop events">K-pop events</option>
+//             <option value="Korean cooking events">Korean cooking events</option>
+//             <option value="Korean course events">
+//               Korean course events
+//             </option>
+//             <option value="Korean language events">
+//               Korean language events
+//             </option>
+//           </select>
+//         </label>
+//       </div>
+//       <EventList events={events} />
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
