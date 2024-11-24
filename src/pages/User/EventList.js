@@ -13,6 +13,8 @@ const EventList = ({ events }) => {
     navigate(`/event/${eventId}`); // Navigate to the detail page
   };
 
+  console.log("EVENTS IN EVENTLIST.JS: ", JSON.stringify(events, null, 2));
+
   return (
     <div className="event-grid">
       {events.map((event, index) => (
@@ -29,8 +31,8 @@ const EventList = ({ events }) => {
           <h3>{event.title}</h3>
           <p>{event.snippet}</p>
           <p>Event Page:{event.contextLink}</p>
-          <p>{event.date || "Date not available"}</p>
-          <p>{event.location || "Location not available"}</p>
+          {/* <p>{event.date || "Date not available"}</p>
+          <p>{event.location || "Location not available"}</p> */}
         </div>
       ))}
     </div>
