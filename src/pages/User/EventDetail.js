@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 const EventDetail = () => {
   const { id } = useParams(); // Get the event ID from the URL
+  console.log(`id in EventDetail.js: ${id}`);
   const [event, setEvent] = useState(null);
   const [error, setError] = useState("");
 
