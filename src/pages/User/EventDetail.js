@@ -1,24 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const EventDetail = () => {
-  const { id } = useParams(); // Get the event ID from the URL
-  console.log(`id in EventDetail.js: ${id}`);
+  const { id } = useParams(); // Extract ID from the URL
   const [event, setEvent] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Event ID:", id); // Debugging log
+    const fetchEventDetail = async () => {
+      try {
+        console.log("Fetching event detail for ID in EventDetail.js:", id);
+
+        // Replace with your backend URL
+        const response = await axios.get(
+          `https://kovebox-server-90387d3b18a6.herokuapp.com/api/event/${id}`
+        );
+
+        console.log("Fetched Event Data in EventDetail.js:", response.data);
+        setEvent(response.data);
+      } catch (err) {
+        console.error("Error fetching event detail:", err.message);
+        setError("Failed to load event details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (id) {
-      fetch(`/api/event/${id}`)
-        .then((response) => response.json())
-        .then((data) => setEvent(data))
-        .catch((err) => setError(err.message));
+      fetchEventDetail();
+    } else {
+      setError("Event ID is missing!");
+      setLoading(false);
     }
   }, [id]);
 
-  if (!id) {
-    return <p>Event ID is missing!</p>;
+  if (loading) {
+    return <p>Loading event details...</p>;
   }
 
   if (error) {
@@ -26,28 +45,81 @@ const EventDetail = () => {
   }
 
   if (!event) {
-    return <p>Loading event details...</p>;
+    return <p>No event found.</p>;
   }
-
-  console.log(`event in EventDetail.js: ${JSON.stringify(event, null, 2)}`);
 
   return (
     <div>
       <h1>{event.title}</h1>
       <p>{event.snippet}</p>
-      <p>{event.link}</p>
-      <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
-        View Original Event
-      </a>
+      <p>
+        <strong>Link:</strong>{" "}
+        <a href={event.link} target="_blank" rel="noopener noreferrer">
+          {event.link}
+        </a>
+      </p>
+      <p>
+        <strong>Context Link:</strong>{" "}
+        <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+          {event.contextLink}
+        </a>
+      </p>
     </div>
   );
 };
 
 export default EventDetail;
 
+// import React, { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
+
+// const EventDetail = () => {
+//   const { id } = useParams(); // Get the event ID from the URL
+//   console.log(`id in EventDetail.js: ${id}`);
+//   const [event, setEvent] = useState(null);
+//   const [error, setError] = useState("");
+
+//   useEffect(() => {
+//     console.log("Event ID:", id); // Debugging log
+//     if (id) {
+//       fetch(`/api/event/${id}`)
+//         .then((response) => response.json())
+//         .then((data) => setEvent(data))
+//         .catch((err) => setError(err.message));
+//     }
+//   }, [id]);
+
+//   if (!id) {
+//     return <p>Event ID is missing!</p>;
+//   }
+
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+//   if (!event) {
+//     return <p>Loading event details...</p>;
+//   }
+
+//   console.log(`event in EventDetail.js: ${JSON.stringify(event, null, 2)}`);
+
+//   return (
+//     <div>
+//       <h1>{event.title}</h1>
+//       <p>{event.snippet}</p>
+//       <p>{event.link}</p>
+//       <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+//         View Original Event
+//       </a>
+//     </div>
+//   );
+// };
+
+// export default EventDetail;
+
 // import React, { useState, useEffect } from "react";
 // import { useParams } from "react-router-dom";
-// import axios from "axios";
+// import   from "axios";
 
 // const EventDetail = () => {
 //   const { id } = useParams(); // Get the event ID from the URL
