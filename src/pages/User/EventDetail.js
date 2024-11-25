@@ -54,7 +54,7 @@ const EventDetail = () => {
       <p>{event.snippet}</p>
       <p>{event.link}</p>
       <p>
-        <strong>Context Link:</strong>{" "}
+        <strong>Link:</strong>{" "}
         <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
           {event.contextLink}
         </a>
