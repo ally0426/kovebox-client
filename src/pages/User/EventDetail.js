@@ -1,35 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 
 const EventDetail = () => {
   const { id } = useParams(); // Get the event ID from the URL
-  console.log(`id in EventDetail.js: ${id}`);
   const [event, setEvent] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEventDetail = async () => {
-      try {
-        const response = await axios.get(
-          `https://kovebox-server-90387d3b18a6.herokuapp.com/api/event/${id}`
-        );
-
-        setEvent(response.data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching event detail:", err.message);
-        setError("Failed to load event details.");
-        setLoading(false);
-      }
-    };
-
-    fetchEventDetail();
+    console.log("Event ID:", id); // Debugging log
+    if (id) {
+      fetch(`/api/event/${id}`)
+        .then((response) => response.json())
+        .then((data) => setEvent(data))
+        .catch((err) => setError(err.message));
+    }
   }, [id]);
 
-  if (loading) {
-    return <p>Loading event details...</p>;
+  if (!id) {
+    return <p>Event ID is missing!</p>;
   }
 
   if (error) {
@@ -37,35 +25,94 @@ const EventDetail = () => {
   }
 
   if (!event) {
-    return <p>No event found.</p>;
+    return <p>Loading event details...</p>;
   }
-  console.log(`EVENT: ${JSON.stringify(event, null, 2)}`);
+
+  console.log(`event in EventDetail.js: ${JSON.stringify(event, null, 2)}`);
 
   return (
     <div>
       <h1>{event.title}</h1>
       <p>{event.snippet}</p>
       <p>{event.link}</p>
-      <p>
-        <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
-          {event.contextLink}
-        </a>
-      </p>
-      <iframe
-        src={event.contextLink}
-        title="Event Details"
-        style={{
-          width: "100%",
-          height: "800px",
-          border: "none",
-          marginTop: "20px",
-        }}
-      ></iframe>
+      <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+        View Original Event
+      </a>
     </div>
   );
 };
 
 export default EventDetail;
+
+// import React, { useState, useEffect } from "react";
+// import { useParams } from "react-router-dom";
+// import axios from "axios";
+
+// const EventDetail = () => {
+//   const { id } = useParams(); // Get the event ID from the URL
+
+//   const [event, setEvent] = useState(null);
+//   const [error, setError] = useState("");
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     console.log(`id in EventDetail.js: ${id}`);
+//     const fetchEventDetail = async () => {
+//       try {
+//         const response = await axios.get(
+//           `https://kovebox-server-90387d3b18a6.herokuapp.com/api/event/${id}`
+//         );
+
+//         setEvent(response.data);
+//         setLoading(false);
+//       } catch (err) {
+//         console.error("Error fetching event detail:", err.message);
+//         setError("Failed to load event details.");
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchEventDetail();
+//   }, [id]);
+
+//   if (loading) {
+//     return <p>Loading event details...</p>;
+//   }
+
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+//   if (!event) {
+//     return <p>No event found.</p>;
+//   }
+//   console.log(`EVENT: ${JSON.stringify(event, null, 2)}`);
+
+//   return (
+//     <div>
+//       <h1>{event.title}</h1>
+//       <p>{event.snippet}</p>
+//       <p>{event.link}</p>
+//       <p>
+//         <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+//           {event.contextLink}
+//         </a>
+//       </p>
+//       <iframe
+//         src={event.contextLink}
+//         title="Event Details"
+//         style={{
+//           width: "100%",
+//           height: "800px",
+//           border: "none",
+//           marginTop: "20px",
+//         }}
+//       ></iframe>
+//     </div>
+//   );
+// };
+
+// export default EventDetail;
 
 // import React from "react";
 // import { useParams } from "react-router-dom";
