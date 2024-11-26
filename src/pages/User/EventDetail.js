@@ -14,7 +14,7 @@ const EventDetail = () => {
         setLoading(true);
         console.log("Fetching event detail for ID:", id);
         const response = await axios.get(
-          `https://kovebox-server-90387d3b18a6.herokuapp.com/api/event/${id}`
+          `https://kovebox-server-90387d3b18a6.herokuapp.com/api/events/${id}`
         );
         console.log("Fetched Event Detail:", response.data);
         setEvent(response.data);

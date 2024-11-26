@@ -14,7 +14,7 @@ const HomePage = () => {
         const response = await axios.get(
           "https://kovebox-server-90387d3b18a6.herokuapp.com/api/events"
         );
-        console.log("Fetched Events:", response.data);
+        console.log("Fetched Events in HomePage.js:", response.data);
         setEvents(response.data);
       } catch (err) {
         console.error("Error fetching events:", err.message);

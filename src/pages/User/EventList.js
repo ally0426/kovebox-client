@@ -5,7 +5,7 @@ const EventList = ({ events }) => {
   const navigate = useNavigate();
 
   const handleEventClick = (id) => {
-    navigate(`/event/${id}`); // Use the UUID as the unique identifier
+    navigate(`/events/${id}`); // Updated to events/id from event/id and use the UUID as the unique identifier
   };
 
   return (
