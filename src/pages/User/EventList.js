@@ -1,45 +1,83 @@
 import React from "react";
-import "./EventList.css";
 import { useNavigate } from "react-router-dom";
 
 const EventList = ({ events }) => {
   const navigate = useNavigate();
 
-  if (!Array.isArray(events) || events.length === 0) {
-    return <p>No events found.</p>;
-  }
-
-  const handleEventClick = (eventId) => {
-    navigate(`/event/${eventId}`); // Navigate to the detail page
+  const handleEventClick = (id) => {
+    navigate(`/event/${id}`); // Use the UUID as the unique identifier
   };
 
-  console.log("EVENTS IN EVENTLIST.JS: ", JSON.stringify(events, null, 2));
-
   return (
-    <div className="event-grid">
-      {events.map((event, index) => (
-        <div
-          key={index}
-          className="event-card"
-          onClick={() => handleEventClick(event.id)}
-        >
-          {event.link ? (
-            <img src={event.link} alt={event.title} className="event-image" />
-          ) : (
-            <div className="no-image-placeholder">{event.title}</div>
-          )}
-          {/* <h3>{event.title}</h3>
-          <p>{event.snippet}</p>
-          <p>Event Page:{event.contextLink}</p> */}
-          {/* <p>{event.date || "Date not available"}</p>
-          <p>{event.location || "Location not available"}</p> */}
-        </div>
-      ))}
+    <div className="event-list">
+      {events.length === 0 ? (
+        <p>No events found.</p>
+      ) : (
+        events.map((event) => (
+          <div
+            key={event.id}
+            className="event-card"
+            onClick={() => handleEventClick(event.id)}
+          >
+            <h2>{event.title}</h2>
+            <p>{event.snippet}</p>
+            <p>
+              <strong>Link:</strong>{" "}
+              <a href={event.link} target="_blank" rel="noopener noreferrer">
+                {event.link}
+              </a>
+            </p>
+          </div>
+        ))
+      )}
     </div>
   );
 };
 
 export default EventList;
+
+// import React from "react";
+// import "./EventList.css";
+// import { useNavigate } from "react-router-dom";
+
+// const EventList = ({ events }) => {
+//   const navigate = useNavigate();
+
+//   if (!Array.isArray(events) || events.length === 0) {
+//     return <p>No events found.</p>;b
+//   }
+
+//   const handleEventClick = (eventId) => {
+//     navigate(`/event/${eventId}`); // Navigate to the detail page
+//   };
+
+//   console.log("EVENTS IN EVENTLIST.JS: ", JSON.stringify(events, null, 2));
+
+//   return (
+//     <div className="event-grid">
+//       {events.map((event, index) => (
+//         <div
+//           key={index}
+//           className="event-card"
+//           onClick={() => handleEventClick(event.id)}
+//         >
+//           {event.link ? (
+//             <img src={event.link} alt={event.title} className="event-image" />
+//           ) : (
+//             <div className="no-image-placeholder">{event.title}</div>
+//           )}
+//           {/* <h3>{event.title}</h3>
+//           <p>{event.snippet}</p>
+//           <p>Event Page:{event.contextLink}</p> */}
+//           {/* <p>{event.date || "Date not available"}</p>
+//           <p>{event.location || "Location not available"}</p> */}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default EventList;
 
 // import React from "react";
 // import "./EventList.css";
@@ -859,7 +897,7 @@ export default EventList;
 //   // Function to load more activities when scrolling
 //   const loadMoreActivities = () => {
 //     const nextOffset = offset + limit;
-//     const moreActivities = activities.slice(nextOffset, nextOffset + limit);
+//     const moreActivities = activities.slice(nextOffset, nextOffset +  );
 
 //     // Check if there are more activities to load
 //     if (moreActivities.length > 0) {

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const EventDetail = () => {
-  const { id } = useParams(); // Extract the ID from the URL
+  const { id } = useParams(); // Get the UUID from the URL
   const [event, setEvent] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -11,28 +11,28 @@ const EventDetail = () => {
   useEffect(() => {
     const fetchEventDetail = async () => {
       try {
+        setLoading(true);
         console.log("Fetching event detail for ID:", id);
-
-        // Make the API request to the backend
         const response = await axios.get(
           `https://kovebox-server-90387d3b18a6.herokuapp.com/api/event/${id}`
         );
-
-        console.log("Fetched Event Data:", response.data);
-        setEvent(response.data); // Update state with the fetched data
+        console.log("Fetched Event Detail:", response.data);
+        setEvent(response.data);
       } catch (err) {
         console.error("Error fetching event detail:", err.message);
         setError("Failed to load event details.");
       } finally {
-        setLoading(false); // Stop loading spinner
+        setLoading(false);
       }
     };
 
     if (id) {
-      setLoading(true); // Show loading while fetching data
       fetchEventDetail();
+    } else {
+      setError("Event ID is missing!");
+      setLoading(false);
     }
-  }, [id]); // Dependency array includes `id`
+  }, [id]);
 
   if (loading) {
     return <p>Loading event details...</p>;
@@ -67,6 +67,76 @@ const EventDetail = () => {
 };
 
 export default EventDetail;
+
+// import React, { useState, useEffect } from "react";
+// import { useParams } from "react-router-dom";
+// import axios from "axios";
+
+// const EventDetail = () => {
+//   const { id } = useParams(); // Extract the ID from the URL
+//   const [event, setEvent] = useState(null);
+//   const [error, setError] = useState("");
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchEventDetail = async () => {
+//       try {
+//         console.log("Fetching event detail for ID:", id);
+
+//         // Make the API request to the backend
+//         const response = await axios.get(
+//           `https://kovebox-server-90387d3b18a6.herokuapp.com/api/event/${id}`
+//         );
+
+//         console.log("Fetched Event Data:", response.data);
+//         setEvent(response.data); // Update state with the fetched data
+//       } catch (err) {
+//         console.error("Error fetching event detail:", err.message);
+//         setError("Failed to load event details.");
+//       } finally {
+//         setLoading(false); // Stop loading spinner
+//       }
+//     };
+
+//     if (id) {
+//       setLoading(true); // Show loading while fetching data
+//       fetchEventDetail();
+//     }
+//   }, [id]); // Dependency array includes `id`
+
+//   if (loading) {
+//     return <p>Loading event details...</p>;
+//   }
+
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+//   if (!event) {
+//     return <p>No event found.</p>;
+//   }
+
+//   return (
+//     <div>
+//       <h1>{event.title}</h1>
+//       <p>{event.snippet}</p>
+//       <p>
+//         <strong>Link:</strong>{" "}
+//         <a href={event.link} target="_blank" rel="noopener noreferrer">
+//           {event.link}
+//         </a>
+//       </p>
+//       <p>
+//         <strong>Context Link:</strong>{" "}
+//         <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+//           {event.contextLink}
+//         </a>
+//       </p>
+//     </div>
+//   );
+// };
+
+// export default EventDetail;
 
 // import React, { useState, useEffect } from "react";
 // import { useParams } from "react-router-dom";
