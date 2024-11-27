@@ -14,6 +14,8 @@ const EventList = ({ events }) => {
         <p>No events found.</p>
       ) : (
         events.map((event) => (
+          console.log(`event in EventList: ${event}`)
+       
           <div
             key={event.id}
             className="event-card"
