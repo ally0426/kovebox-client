@@ -19,18 +19,25 @@ const EventList = ({ events }) => {
             className="event-card"
             onClick={() => handleEventClick(event.id)}
           >
-            {event.link ? (
-              <img src={event.link} alt={event.title} className="event-image" />
+            {event.link || event.iamge?.thumbnailLink ? (
+              <img
+                src={event.link || event.iamge?.thumbnailLink}
+                alt={event.title}
+                className="event-image"
+              />
             ) : (
-              <div className="no-image-placeholder">{event.title}</div>
+              <div className="no-image-placeholder">
+                No image - {event.title}
+              </div>
             )}
             <h2>{event.title}</h2>
             <p>{event.snippet}</p>
             {/* <p>{event.link || event.image?.thumbnailLink}</p> */}
             <p>
-              {event.image?.contextLink ||
-                event.displayLink ||
-                event.pagemap?.metatags?.[0]?.["og:url"]}
+              {
+                event.image?.contextLink || event.displayLink
+                // || event.pagemap?.metatags?.[0]?.["og:url"]
+              }
             </p>
 
             {/* <h2>{event.title}</h2>
