@@ -8,14 +8,14 @@ const EventList = ({ events }) => {
     navigate(`/events/${id}`); // Updated to events/id from event/id and use the UUID as the unique identifier
   };
 
+  console.log(`events in EventList.js: ${JSON.stringify(events, null, 2)}`);
+
   return (
     <div className="event-list">
       {events.length === 0 ? (
         <p>No events found.</p>
       ) : (
         events.map((event) => (
-          console.log(`event in EventList: ${event}`)
-       
           <div
             key={event.id}
             className="event-card"
