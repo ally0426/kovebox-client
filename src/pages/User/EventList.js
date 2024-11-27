@@ -21,9 +21,17 @@ const EventList = ({ events }) => {
             className="event-card"
             onClick={() => handleEventClick(event.id)}
           >
-            {event.link || event.iamge?.thumbnailLink ? (
+            {event.link ||
+            event.iamge?.thumbnailLink ||
+            event.pagemap?.cse_image ||
+            event.pagemap?.cse_thumbnail ? (
               <img
-                src={event.link || event.iamge?.thumbnailLink}
+                src={
+                  event.link ||
+                  event.iamge?.thumbnailLink ||
+                  event.pagemap?.cse_image ||
+                  event.pagemap?.cse_thumbnail
+                }
                 alt={event.title}
                 className="event-image"
               />
