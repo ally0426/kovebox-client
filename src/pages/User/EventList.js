@@ -4,18 +4,51 @@ import axios from "axios";
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
+  const [location, setLocation] = useState(null); // User's location
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true); // Tracks if more data is available
   const limit = 10; // Number of events per load
   const navigate = useNavigate();
 
+  // Detect user's location
+  useEffect(() => {
+    const detectLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
+          },
+          (error) => {
+            console.error("Error detecting location:", error.message);
+            // Default to Los Angeles, CA
+            setLocation({ latitude: 34.0522, longitude: -118.2437 });
+          }
+        );
+      } else {
+        console.error("Geolocation not supported by this browser.");
+        // Default to Los Angeles, CA
+        setLocation({ latitude: 34.0522, longitude: -118.2437 });
+      }
+    };
+
+    detectLocation();
+  }, []);
+
   // Fetch events
   const fetchEvents = async () => {
+    if (!location) return;
+
     try {
       const response = await axios.get(
         `https://kovebox-server-90387d3b18a6.herokuapp.com/api/events`,
         {
-          params: { offset, limit },
+          params: {
+            offset,
+            limit,
+            latitude: location.latitude,
+            longitude: location.longitude,
+          },
         }
       );
 
@@ -32,8 +65,10 @@ const EventList = () => {
 
   // Trigger fetching events on component mount and when offset changes
   useEffect(() => {
-    fetchEvents();
-  }, [offset]);
+    if (location) {
+      fetchEvents();
+    }
+  }, [location, offset]);
 
   // Handle scrolling
   const handleScroll = () => {
