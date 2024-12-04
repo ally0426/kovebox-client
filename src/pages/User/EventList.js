@@ -4,7 +4,7 @@ import axios from "axios";
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
-  const [location, setLocation] = useState(null); // User's location
+  const [location, setLocation] = useState({ latitude: 34.0522, longitude: -118.2437 }); // Default: Los Angeles, CA
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true); // Tracks if more data is available
   const limit = 10; // Number of events per load
