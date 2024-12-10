@@ -48,6 +48,12 @@ const EventList = () => {
             },
           }
         );
+        console.log("Received query parameters in EventList.js:", {
+          offset,
+          limit,
+          latitude,
+          longitude, // Note: Using location.latitude and location.longitude here
+        });
         console.log("Fetched events:", response.data);
         setEvents((prevEvents) => [...prevEvents, ...response.data]);
       } catch (err) {
@@ -90,7 +96,11 @@ const EventList = () => {
             )}
             <h3>{event.title}</h3>
             <p>{event.snippet}</p>
-            <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+            <a
+              href={event.contextLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               View Details
             </a>
           </div>
