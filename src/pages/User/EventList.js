@@ -48,12 +48,7 @@ const EventList = () => {
             },
           }
         );
-        console.log("Received query parameters in EventList.js:", {
-          offset,
-          limit,
-          latitude,
-          longitude, // Note: Using location.latitude and location.longitude here
-        });
+
         console.log("Fetched events:", response.data);
         setEvents((prevEvents) => [...prevEvents, ...response.data]);
       } catch (err) {
