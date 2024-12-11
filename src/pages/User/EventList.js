@@ -55,17 +55,22 @@ const EventList = () => {
           }
         );
 
-        console.log("Fetched events:", JSON.stringify(response.data, null, 2));
-        if (response.data.error) {
-          console.error("Error from server: ", response.data.error);
-        } else {
+        console.log("Server response status: ", response.status);
+        console.log(
+          "Server response data:",
+          JSON.stringify(response.data, null, 2)
+        );
+        if (response.status === 200) {
           setEvents((prevEvents) => [...prevEvents, ...response.data]);
+        } else {
+          console.log("Unexpected server sattus: ", response.status);
+          setError("Failed to fetch events", response.status);
         }
       } catch (err) {
         console.error(
-          "Error fetching events:",
-          err.response?.status,
-          err.respnose.data || err.message
+          "Error fetching events: ",
+          err.response?.status || err.message,
+          err.respnose?.data || ""
         );
         setError("Failed to fetch events.");
       }
