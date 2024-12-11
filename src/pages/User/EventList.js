@@ -37,6 +37,12 @@ const EventList = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        console.log("Requesting events with:", {
+        offset,
+        limit,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
         const response = await axios.get(
           `https://kovebox-server-90387d3b18a6.herokuapp.com/api/events`,
           {
