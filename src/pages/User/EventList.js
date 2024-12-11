@@ -38,11 +38,11 @@ const EventList = () => {
     const fetchEvents = async () => {
       try {
         console.log("Requesting events with:", {
-        offset,
-        limit,
-        latitude: location.latitude,
-        longitude: location.longitude,
-      });
+          offset,
+          limit,
+          latitude: location.latitude,
+          longitude: location.longitude,
+        });
         const response = await axios.get(
           `https://kovebox-server-90387d3b18a6.herokuapp.com/api/events`,
           {
@@ -55,8 +55,12 @@ const EventList = () => {
           }
         );
 
-        console.log("Fetched events:", response.data);
-        setEvents((prevEvents) => [...prevEvents, ...response.data]);
+        console.log("Fetched events:", JSON.stringify(response.data, null, 2));
+        if (response.data.error) {
+          console.error("Error from server: ", response.data.error);
+        } else {
+          setEvents((prevEvents) => [...prevEvents, ...response.data]);
+        }
       } catch (err) {
         console.error("Error fetching events:", err.message);
         setError("Failed to fetch events.");
