@@ -62,7 +62,11 @@ const EventList = () => {
           setEvents((prevEvents) => [...prevEvents, ...response.data]);
         }
       } catch (err) {
-        console.error("Error fetching events:", err.message);
+        console.error(
+          "Error fetching events:",
+          err.response?.status,
+          err.respnose.data || err.message
+        );
         setError("Failed to fetch events.");
       }
     };
