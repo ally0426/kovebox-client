@@ -1,49 +1,93 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import EventList from "./User/EventList";
 
 const HomePage = () => {
-  const [events, setEvents] = useState([]);
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
 
+  // Detect user location
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          "https://kovebox-server-90387d3b18a6.herokuapp.com/api/events"
+    const detectLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLocation({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          (err) => {
+            console.error("Geolocation error:", err.message);
+            setError("Unable to detect location. Using default location.");
+            setLocation({ latitude: 34.0522, longitude: -118.2437 }); // Default to Los Angeles, CA
+          }
         );
-        console.log("Fetched Events in HomePage.js:", response.data);
-        setEvents(response.data);
-      } catch (err) {
-        console.error("Error fetching events:", err.message);
-        setError("Failed to load events.");
-      } finally {
-        setLoading(false);
+      } else {
+        console.warn("Geolocation not supported by this browser.");
+        setError("Geolocation not supported. Using default location.");
+        setLocation({ latitude: 34.0522, longitude: -118.2437 }); // Default to Los Angeles, CA
       }
     };
 
-    fetchEvents();
+    detectLocation();
   }, []);
-
-  if (loading) {
-    return <p>Loading events...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
 
   return (
     <div>
-      <h1>Events</h1>
-      <EventList events={events} />
+      {error && <p>{error}</p>}
+      <EventList location={location} />
     </div>
   );
 };
 
 export default HomePage;
+
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import EventList from "./User/EventList";
+
+// const HomePage = () => {
+//   const [events, setEvents] = useState([]);
+//   const [error, setError] = useState("");
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchEvents = async () => {
+//       try {
+//         setLoading(true);
+//         const response = await axios.get(
+//           "https://kovebox-server-90387d3b18a6.herokuapp.com/api/events"
+//         );
+//         console.log("Fetched Events in HomePage.js:", response.data);
+//         setEvents(response.data);
+//       } catch (err) {
+//         console.error("Error fetching events:", err.message);
+//         setError("Failed to load events.");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchEvents();
+//   }, []);
+
+//   if (loading) {
+//     return <p>Loading events...</p>;
+//   }
+
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+//   return (
+//     <div>
+//       <h1>Events</h1>
+//       <EventList events={events} />
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
