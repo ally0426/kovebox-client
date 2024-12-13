@@ -3,39 +3,54 @@ import EventList from "./User/EventList";
 
 const HomePage = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null });
-  const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [useUserLocation, setUseUserLocation] = useState(false);
 
-  // Detect user location
-  useEffect(() => {
-    const detectLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-          },
-          (err) => {
-            console.error("Geolocation error:", err.message);
-            setError("Unable to detect location. Using default location.");
-            setLocation({ latitude: 34.0522, longitude: -118.2437 }); // Default to Los Angeles, CA
-          }
-        );
-      } else {
-        console.warn("Geolocation not supported by this browser.");
-        setError("Geolocation not supported. Using default location.");
-        setLocation({ latitude: 34.0522, longitude: -118.2437 }); // Default to Los Angeles, CA
-      }
-    };
+  const fetchUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          setUseUserLocation(true);
+        },
+        (err) => {
+          console.error("Geolocation error:", err.message);
+          alert("Unable to detect location. Please enter a location manually.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  };
 
-    detectLocation();
-  }, []);
+  const handleSearch = () => {
+    if (searchQuery.trim() === "") {
+      alert("Please enter a valid location.");
+    } else {
+      setUseUserLocation(false); // Use search location instead of user location
+      setLocation({ searchQuery });
+    }
+  };
 
   return (
     <div>
-      {error && <p>{error}</p>}
-      <EventList location={location} />
+      <div className="controls">
+        <button onClick={fetchUserLocation}>SHOW MY AREA</button>
+        <input
+          type="text"
+          placeholder="Search for a location"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button onClick={handleSearch}>SEARCH</button>
+      </div>
+      <EventList
+        location={useUserLocation ? location : null}
+        searchQuery={!useUserLocation ? searchQuery : null}
+      />
     </div>
   );
 };
