@@ -1,35 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const EventList = ({ location }) => {
+const EventList = ({ location, searchQuery }) => {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState("");
   const [offset, setOffset] = useState(0);
   const limit = 10;
 
-  // Fetch events based on location
   useEffect(() => {
     const fetchEvents = async () => {
-      if (!location.latitude || !location.longitude) return;
-
       try {
-        console.log("Fetching events with params:", {
+        const params = {
           offset,
           limit,
-          latitude: location.latitude,
-          longitude: location.longitude,
-        });
+        };
+
+        if (location?.latitude && location?.longitude) {
+          params.latitude = location.latitude;
+          params.longitude = location.longitude;
+        } else if (searchQuery) {
+          params.searchQuery = searchQuery;
+        }
+
+        console.log("Fetching events with params:", params);
 
         const response = await axios.get(
           `https://kovebox-server-90387d3b18a6.herokuapp.com/api/events`,
-          {
-            params: {
-              offset,
-              limit,
-              latitude: location.latitude,
-              longitude: location.longitude,
-            },
-          }
+          { params }
         );
 
         console.log("Fetched events from server:", response.data);
@@ -41,9 +38,8 @@ const EventList = ({ location }) => {
     };
 
     fetchEvents();
-  }, [location, offset]);
+  }, [location, searchQuery, offset]);
 
-  // Infinite scroll handler
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop >=
@@ -72,11 +68,7 @@ const EventList = ({ location }) => {
             )}
             <h3>{event.title}</h3>
             <p>{event.snippet}</p>
-            <a
-              href={event.contextLink}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
               View Details
             </a>
           </div>
