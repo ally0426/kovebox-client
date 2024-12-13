@@ -20,12 +20,12 @@ const EventList = () => {
             });
           },
           (error) => {
-            console.error("Geolocation error:", error.message);
+            console.error("Geolocation error defaulted to LA, CA:", error.message);
             setLocation({ latitude: 34.0522, longitude: -118.2437 }); // Default to Los Angeles, CA
           }
         );
       } else {
-        console.warn("Geolocation not supported by this browser.");
+        console.warn("Geolocation not supported by this browser defaulted to LA, CA.");
         setLocation({ latitude: 34.0522, longitude: -118.2437 });
       }
     };
@@ -60,7 +60,11 @@ const EventList = () => {
           "Server response data:",
           JSON.stringify(response.data, null, 2)
         );
-        if (response.status === 200) {
+
+if (response.status === 404) {
+  console.error("No events found. 404 error");
+  setError("No events found. 404 error");
+} else if (response.status === 200) {
           setEvents((prevEvents) => [...prevEvents, ...response.data]);
         } else {
           console.log("Unexpected server sattus: ", response.status);
