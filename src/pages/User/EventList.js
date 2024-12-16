@@ -23,13 +23,15 @@ const EventList = ({ location, searchQuery }) => {
         }
 
         console.log("Fetching events with params:", params);
-
+        alert(`Fetching events with params: ${JSON.stringify(params)}`);
+        
         const response = await axios.get(
           `https://kovebox-server-90387d3b18a6.herokuapp.com/api/events`,
           { params }
         );
 
         console.log("Fetched events from server:", response.data);
+        alert(`Fetched events from server: ${JSON.stringify(response.data)}`);
         setEvents((prevEvents) => [...prevEvents, ...response.data]);
       } catch (err) {
         console.error("Error fetching events:", err.message);
