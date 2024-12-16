@@ -15,6 +15,7 @@ const HomePage = () => {
             longitude: position.coords.longitude,
           });
           setUseUserLocation(true);
+          alert(`User location detected: ${position.coords.latitude}` ${position.coord.longitude});
         },
         (err) => {
           console.error("Geolocation error:", err.message);
@@ -27,6 +28,7 @@ const HomePage = () => {
   };
 
   const handleSearch = () => {
+    alert(`searchQuery: ${searchQuery}`);
     if (searchQuery.trim() === "") {
       alert("Please enter a valid location.");
     } else {
