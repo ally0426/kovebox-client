@@ -54,23 +54,25 @@ const EventList = ({ location, searchQuery }) => {
     <div>
       {error && <p>{error}</p>}
       {events.length === 0 && !error && <p>No events found.</p>}
-    
-        <div className="event-grid">
-  {events.map((event) => (
-    <div key={event.id} className="event-card">
-      <img
-        src={event.image || "https://via.placeholder.com/300x200"} 
-        alt={event.title}
-      />
-      <h3>{event.title}</h3>
-      <p>{event.snippet}</p>
-      <p><strong>Location:</strong> {event.location}</p>
-      <p><strong>Time:</strong> {event.time}</p>
-      <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
-        View Details
-      </a>
-    </div>
-  
+      <div className="event-grid">
+        {events.map((event) => (
+          <div key={event.id} className="event-card">
+            <img
+              src={
+                event.image || "https://via.placeholder.com/300x200?text=No+Image+Available"
+              }
+              alt={event.title}
+            />
+            <h3>{event.title}</h3>
+            <p>{event.snippet}</p>
+            <p><strong>Location:</strong> {event.location}</p>
+            <p><strong>Time:</strong> {event.time}</p>
+            <a href={event.contextLink} target="_blank" rel="noopener noreferrer">
+              View Details
+            </a>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
