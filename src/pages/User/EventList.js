@@ -1,109 +1,90 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const EventList = ({ location, searchQuery }) => {
+const EventList = () => {
   const [events, setEvents] = useState([]); // State to store fetched events
-  const [error, setError] = useState(""); // State for error handling
+  const [error, setError] = useState(""); // State for error messages
   const [offset, setOffset] = useState(0); // Pagination offset
-  const limit = 10; // Number of events to load per request
-  const [manualSearch, setManualSearch] = useState(searchQuery || ""); // State for manual search input
-  const [userLocation, setUserLocation] = useState(location); // Store user location
+  const limit = 10; // Number of events per request
+  const [manualSearch, setManualSearch] = useState(""); // Manual search input
+  const [location, setLocation] = useState("United States"); // Default location
+  const [coords, setCoords] = useState(null); // User coordinates
 
   useEffect(() => {
-    // Fetch Events Function
-    const fetchEvents = async () => {
-      try {
-        const params = {
-          offset,
-          limit,
-        };
+    fetchEvents(location, coords); // Fetch events on initial load
+  }, []);
 
-        if (userLocation?.latitude && userLocation?.longitude) {
-          // Fetch based on user location
-          params.latitude = userLocation.latitude;
-          params.longitude = userLocation.longitude;
-        } else if (manualSearch) {
-          // Fetch based on manual search input
-          params.searchQuery = manualSearch;
-        } else {
-          // Default behavior - Fetch events in the USA
-          params.searchQuery = "United States";
-        }
+  // Function to fetch events
+  const fetchEvents = async (searchLocation = "United States", userCoords = null) => {
+    try {
+      setError(""); // Reset error message
+      const params = {
+        offset,
+        limit,
+        searchQuery: searchLocation,
+      };
 
-        console.log("Fetching events with params:", params);
-
-        const response = await axios.get(
-          `https://kovebox-server-90387d3b18a6.herokuapp.com/api/events`,
-          { params }
-        );
-
-        console.log("Fetched events:", response.data);
-        setEvents((prevEvents) =>
-          offset === 0 ? response.data : [...prevEvents, ...response.data]
-        );
-      } catch (err) {
-        console.error("Error fetching events:", err.message);
-        setError("Failed to fetch events.");
+      if (userCoords?.latitude && userCoords?.longitude) {
+        params.latitude = userCoords.latitude;
+        params.longitude = userCoords.longitude;
       }
-    };
 
-    fetchEvents();
-  }, [userLocation, manualSearch, offset]);
+      console.log("Fetching events with params:", params);
 
-  // Infinite Scroll Functionality
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-      document.documentElement.offsetHeight - 500
-    ) {
-      setOffset((prevOffset) => prevOffset + limit);
+      const response = await axios.get(
+        `https://kovebox-server-90387d3b18a6.herokuapp.com/api/events`,
+        { params }
+      );
+
+      setEvents(response.data);
+    } catch (err) {
+      console.error("Error fetching events:", err.message);
+      setError("Failed to load events. Showing default events for the USA.");
+      setEvents([]); // Default to no events
+      setLocation("United States");
+      fetchEvents("United States"); // Reload USA events as fallback
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Detect User Location
-  const fetchUserLocation = () => {
+  // Function to handle "USE MY AREA"
+  const handleUseMyArea = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-          setOffset(0); // Reset pagination
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          setCoords({ latitude, longitude });
+          setLocation(`Lat: ${latitude}, Lng: ${longitude}`);
+          fetchEvents("Your Area", { latitude, longitude }); // Fetch events with coordinates
         },
         (err) => {
-          console.error("Geolocation error:", err.message);
-          alert("Unable to detect location. Please enter a location manually.");
+          console.error("Error detecting location:", err.message);
+          alert("Unable to detect location. Defaulting to USA.");
+          fetchEvents("United States");
         }
       );
     } else {
       alert("Geolocation is not supported by this browser.");
+      fetchEvents("United States");
     }
   };
 
-  // Handle Manual Search
+  // Function to handle SEARCH
   const handleManualSearch = () => {
     if (!manualSearch.trim()) {
       alert("Please enter a valid location.");
       return;
     }
-    setUserLocation(null); // Clear user location
-    setOffset(0); // Reset pagination
-    setEvents([]); // Clear events
+
+    fetchEvents(manualSearch); // Fetch events for entered location
   };
 
   return (
     <div>
+      {/* Controls */}
       <div className="controls">
-        {/* Show My Area Button */}
-        <button onClick={fetchUserLocation}>SHOW MY AREA</button>
-
-        {/* Manual Search Box */}
+        <button onClick={handleUseMyArea}>USE MY AREA</button>
         <input
           type="text"
           placeholder="Search for a location"
@@ -113,46 +94,40 @@ const EventList = ({ location, searchQuery }) => {
         <button onClick={handleManualSearch}>SEARCH</button>
       </div>
 
+      {/* Display Error */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
       {/* Event List */}
-      {error && <p>{error}</p>}
-      {events.length === 0 && !error && <p>No events found.</p>}
-
       <div className="event-grid">
-        {events.map((event) => (
-          <div key={event.id} className="event-card">
-            {/* Image */}
-            <img
-              src={
-                event.image || "https://via.placeholder.com/300x200?text=No+Image+Available"
-              }
-              alt={event.title}
-            />
-            {/* Event Title */}
-            <h3>{event.title}</h3>
-
-            {/* Event Description */}
-            <p>{event.snippet}</p>
-
-            {/* Location */}
-            <p>
-              <strong>Location:</strong> {event.location || "Unknown location"}
-            </p>
-
-            {/* Time */}
-            <p>
-              <strong>Time:</strong> {event.time || "Time not available"}
-            </p>
-
-            {/* View Details */}
-            <a
-              href={event.contextLink}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View Details
-            </a>
-          </div>
-        ))}
+        {events.length === 0 ? (
+          <p>No events found.</p>
+        ) : (
+          events.map((event) => (
+            <div key={event.id} className="event-card">
+              <img
+                src={
+                  event.image || "https://via.placeholder.com/300x200?text=No+Image+Available"
+                }
+                alt={event.title}
+              />
+              <h3>{event.title}</h3>
+              <p>{event.snippet}</p>
+              <p>
+                <strong>Location:</strong> {event.location}
+              </p>
+              <p>
+                <strong>Time:</strong> {event.time}
+              </p>
+              <a
+                href={event.contextLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Details
+              </a>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
