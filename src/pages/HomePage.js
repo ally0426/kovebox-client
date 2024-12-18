@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import EventList from "../User/EventList";
+import EventList from "./User/EventList";
 import axios from "axios";
 
 const HomePage = () => {
