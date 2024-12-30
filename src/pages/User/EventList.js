@@ -37,8 +37,8 @@ const EventList = ({ events }) => {
               </a>
             </div>
           </div>
-        ))
-      )}
+        ))}
+      </div>
     </div>
   );
 };
