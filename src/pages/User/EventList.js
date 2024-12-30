@@ -2,10 +2,10 @@ import React from "react";
 
 const EventList = ({ events }) => {
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4 py-8">
       {/* {error && <p>{error}</p>} */}
-      {events.length === 0 ? <p>No events found.</p> : "Korean Events"}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      {/* {events.length === 0 ? <p>No events found.</p> : "Korean Events"} */}
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
         {events.map((event) => (
           <div
             key={event.id}
