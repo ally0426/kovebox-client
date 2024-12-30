@@ -9,13 +9,14 @@ const EventList = ({ events }) => {
         {events.map((event) => (
           <div
             key={event.id}
-            className="bg-white shadow-lg rounded-lg overflow-hidden text-center flex flex-col justify-between"
+            className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col items-center text-center"
           >
             {event.image ? (
               <img
                 src={event.image}
                 alt={event.title}
                 className="w-full h-40 object-cover"
+                style={{ objectFit: "cover", width: "100%", height: "150px" }}
               />
             ) : (
               <p>No image available</p>
