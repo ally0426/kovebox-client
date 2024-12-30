@@ -2,7 +2,6 @@ import React from "react";
 
 const EventList = ({ events }) => {
   return (
-<<<<<<< HEAD
     <div className="container mx-auto px-4">
       {error && <p>{error}</p>}
       {events.length === 0 && !error && <p>No events found.</p>}
@@ -37,41 +36,6 @@ const EventList = ({ events }) => {
                 View Details
               </a>
             </div>
-=======
-    <div className="event-grid">
-      {events.length === 0 ? (
-        <p>No events found.</p>
-    ) : (
-        events.map((event) => (
-          <div key={event.id} className="event-card">
-            {/* Event Image */}
-            <img
-              src={
-                event.image || "https://via.placeholder.com/300x200?text=No+Image+Available"
-              }
-              alt={event.title}
-            />
-            {/* Event Title */}
-            <h3>{event.title}</h3>
-            {/* Event Description */}
-            <p>{event.snippet}</p>
-            {/* Event Location */}
-            <p>
-              <strong>Location:</strong> {event.location || "Location unavailable"}
-            </p>
-            {/* Event Time */}
-            <p>
-              <strong>Time:</strong> {event.time || "Time not available"}
-            </p>
-            {/* View Details Link */}
-            <a
-              href={event.contextLink}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View Details
-            </a>
->>>>>>> 55622ff61bc08a77c08b32cd217d89905f2959fd
           </div>
         ))
       )}
