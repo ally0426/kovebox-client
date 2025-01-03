@@ -3,28 +3,11 @@ import "./EventList.css";
 import axios from "axios";
 
 const EventList = ({ events }) => {
-  const [events, setEvents] = useState([])
+  // const [events, setEvents] = useState([])
   // const [location, setLocation] = useState( { latitude: null, longitude: null})
-  const [loading, setLoading] = useState(false)
-  const [offset, setOffset] = useState(0) // Keeps track of the offset for pagination
+  // const [loading, setLoading] = useState(false)
+  // const [offset, setOffset] = useState(0) // Keeps track of the offset for pagination
   // const [error, setError] = useState(null)
-
-
-
-  // Function to load events
-  const loadEvents = async () => {
-    if (loading) return; // Prevent multiple requests at the same time
-    setLoading(true);
-    try {
-      const response = await axios.get("https://kovebox-server-90387d3b18a6.herokuapp.com/api/events", {
-        params: {
-          offset: offset,
-          limit: 30, // You can just this based on how many events you want per scroll
-          latitude: 
-        }
-      })
-    }
-  }
 
   return (
     <div className="container mx-auto px-4 py-8">
