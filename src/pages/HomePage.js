@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
+import "./HomePage.css";
 import EventList from "./User/EventList";
 import axios from "axios";
 
 const HomePage = () => {
   const [events, setEvents] = useState([]); // State for events
+  // const [location, setLocation] = useState(null); // State for location
+  // const [searchQuery, setSearchQuery] = useState(""); // State for search
+
   const [error, setError] = useState(""); // Error state
   const [manualSearch, setManualSearch] = useState(""); // Manual search input
   const [state, setState] = useState("United States"); // Default location
   const [offset, setOffset] = useState(0); // Pagination offset
-  const limit = 10; // Number of results per request
-
+  const limit = 30; // Number of
   // Fetch Events
   const fetchEvents = async (locationQuery = "United States") => {
     try {
@@ -110,14 +113,24 @@ const HomePage = () => {
       <h1>Find Korean Events Near You</h1>
       {/* Controls */}
       <div className="controls">
-        <button onClick={handleUseMyArea}>USE MY AREA</button>
+        <button
+          onClick={handleUseMyArea}
+          className="inline-block px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+        >
+          USE MY AREA
+        </button>
         <input
           type="text"
           placeholder="Search for a location"
           value={manualSearch}
           onChange={(e) => setManualSearch(e.target.value)}
         />
-        <button onClick={handleManualSearch}>SEARCH</button>
+        <button
+          onClick={handleManualSearch}
+          className="inline-block px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+        >
+          SEARCH
+        </button>
       </div>
 
       {/* Error Message */}
