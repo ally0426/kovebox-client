@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
-import "./HomePage.css";
 import EventList from "./User/EventList";
 import axios from "axios";
 
 const HomePage = () => {
   const [events, setEvents] = useState([]); // State for events
-  // const [location, setLocation] = useState(null); // State for location
-  // const [searchQuery, setSearchQuery] = useState(""); // State for search
-
   const [error, setError] = useState(""); // Error state
   const [manualSearch, setManualSearch] = useState(""); // Manual search input
   const [state, setState] = useState("United States"); // Default location
   const [offset, setOffset] = useState(0); // Pagination offset
-  const limit = 30; // Number of
+  const limit = 30; // Number of results per request
+
   // Fetch Events
   const fetchEvents = async (locationQuery = "United States") => {
     try {

@@ -1,18 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "./EventList.css";
-import axios from "axios";
-
 const EventList = ({ events }) => {
-  // const [events, setEvents] = useState([])
-  // const [location, setLocation] = useState( { latitude: null, longitude: null})
-  // const [loading, setLoading] = useState(false)
-  // const [offset, setOffset] = useState(0) // Keeps track of the offset for pagination
-  // const [error, setError] = useState(null)
-
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* {error && <p>{error}</p>} */}
-      {/* {events.length === 0 ? <p>No events found.</p> : "Korean Events"} */}
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
         {events.map((event) => (
           <div
